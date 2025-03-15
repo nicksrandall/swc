@@ -9,4 +9,6 @@ var condString, exprAny1, exprBoolean1, exprNumber1, exprString1, exprIsObject1,
 condString.toUpperCase, foo();
 foo();
 condString.toUpperCase, foo();
+condString.toUpperCase, foo(), foo();
+condString.toUpperCase, foo(), 0;
 condString.toUpperCase;
