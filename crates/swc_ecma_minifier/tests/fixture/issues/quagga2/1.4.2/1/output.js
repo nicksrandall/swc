@@ -887,7 +887,7 @@
                             x: _inputImageWrapper.size.x / 2 | 0,
                             // eslint-disable-next-line no-bitwise
                             y: _inputImageWrapper.size.y / 2 | 0
-                        }) : _inputImageWrapper, _patchSize = Object(_common_cv_utils__WEBPACK_IMPORTED_MODULE_3__./* calculatePatchSize */ a)(_config.patchSize, _currentImageWrapper.size), _numPatches.x = _currentImageWrapper.size.x / _patchSize.x | 0, _numPatches.y = _currentImageWrapper.size.y / _patchSize.y | 0, _binaryImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_currentImageWrapper.size, void 0, Uint8Array, !1), _labelImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, void 0, Array, !0), skeletonImageData = new ArrayBuffer(65536), _subImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, new Uint8Array(skeletonImageData, 0, _patchSize.x * _patchSize.y)), _skelImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, new Uint8Array(skeletonImageData, _patchSize.x * _patchSize.y * 3, _patchSize.x * _patchSize.y), void 0, !0), _skeletonizer = Object(_skeletonizer__WEBPACK_IMPORTED_MODULE_8__./* default */ a)("undefined" != typeof window ? window : "undefined" != typeof self ? self : global, {
+                        }) : _inputImageWrapper, _patchSize = Object(_common_cv_utils__WEBPACK_IMPORTED_MODULE_3__./* calculatePatchSize */ a)(_config.patchSize, _currentImageWrapper.size), _numPatches.x = _currentImageWrapper.size.x / _patchSize.x | 0, _numPatches.y = _currentImageWrapper.size.y / _patchSize.y | 0, _binaryImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_currentImageWrapper.size, void 0, Uint8Array, !1), _labelImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, void 0, Array, !0), skeletonImageData = new ArrayBuffer(64 * 1024), _subImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, new Uint8Array(skeletonImageData, 0, _patchSize.x * _patchSize.y)), _skelImageWrapper = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a(_patchSize, new Uint8Array(skeletonImageData, _patchSize.x * _patchSize.y * 3, _patchSize.x * _patchSize.y), void 0, !0), _skeletonizer = Object(_skeletonizer__WEBPACK_IMPORTED_MODULE_8__./* default */ a)("undefined" != typeof window ? window : "undefined" != typeof self ? self : global, {
                             size: _patchSize.x
                         }, skeletonImageData), _imageToPatchGrid = new _common_image_wrapper__WEBPACK_IMPORTED_MODULE_2__./* default */ a({
                             // eslint-disable-next-line no-bitwise
@@ -1544,7 +1544,7 @@
         /***/ },
         /* 52 */ /***/ function(module1, exports1, __webpack_require__) {
             /* WEBPACK VAR INJECTION */ (function(module1) {
-                var root = __webpack_require__(17), stubFalse = __webpack_require__(134), freeExports = exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, Buffer = freeModule && freeModule.exports === freeExports ? root.Buffer : void 0;
+                var root = __webpack_require__(17), stubFalse = __webpack_require__(134), freeExports = !0 && exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, Buffer = freeModule && freeModule.exports === freeExports ? root.Buffer : void 0;
                 module1.exports = (Buffer ? Buffer.isBuffer : void 0) || stubFalse;
             /* WEBPACK VAR INJECTION */ }).call(this, __webpack_require__(38)(module1));
         /***/ },
@@ -2080,6 +2080,11 @@
                             sum = (images[inImagePtr + yStart1 + xStart1 | 0] | 0) + (images[inImagePtr + yStart1 + xStart2 | 0] | 0) + (images[inImagePtr + offset + u | 0] | 0) + (images[inImagePtr + yStart2 + xStart1 | 0] | 0) + (images[inImagePtr + yStart2 + xStart2 | 0] | 0) | 0;
                             if ((sum | 0) == 5) images[outImagePtr + offset + u | 0] = 1;
                             else images[outImagePtr + offset + u | 0] = 0;
+                            if ((sum | 0) == (5 | 0)) {
+                                images[outImagePtr + offset + u | 0] = 1;
+                            } else {
+                                images[outImagePtr + offset + u | 0] = 0;
+                            }
                         }
                     }
                 }
@@ -2147,6 +2152,11 @@
                             sum = (images[inImagePtr + yStart1 + xStart1 | 0] | 0) + (images[inImagePtr + yStart1 + xStart2 | 0] | 0) + (images[inImagePtr + offset + u | 0] | 0) + (images[inImagePtr + yStart2 + xStart1 | 0] | 0) + (images[inImagePtr + yStart2 + xStart2 | 0] | 0) | 0;
                             if ((sum | 0) > 0) images[outImagePtr + offset + u | 0] = 1;
                             else images[outImagePtr + offset + u | 0] = 0;
+                            if ((sum | 0) > (0 | 0)) {
+                                images[outImagePtr + offset + u | 0] = 1;
+                            } else {
+                                images[outImagePtr + offset + u | 0] = 0;
+                            }
                         }
                     }
                 }
@@ -2383,7 +2393,7 @@
                 var data = this.__data__;
                 if (data instanceof ListCache) {
                     var pairs = data.__data__;
-                    if (!Map1 || pairs.length < 199) return pairs.push([
+                    if (!Map1 || pairs.length < 200 - 1) return pairs.push([
                         key,
                         value
                     ]), this.size = ++data.size, this;
@@ -2720,7 +2730,7 @@
         /***/ },
         /* 124 */ /***/ function(module1, exports1, __webpack_require__) {
             /* WEBPACK VAR INJECTION */ (function(module1) {
-                var root = __webpack_require__(17), freeExports = exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, Buffer = freeModule && freeModule.exports === freeExports ? root.Buffer : void 0, allocUnsafe = Buffer ? Buffer.allocUnsafe : void 0;
+                var root = __webpack_require__(17), freeExports = !0 && exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, Buffer = freeModule && freeModule.exports === freeExports ? root.Buffer : void 0, allocUnsafe = Buffer ? Buffer.allocUnsafe : void 0;
                 module1.exports = /**
                      * Creates a clone of  `buffer`.
                      *
@@ -2941,7 +2951,7 @@
         /***/ },
         /* 138 */ /***/ function(module1, exports1, __webpack_require__) {
             /* WEBPACK VAR INJECTION */ (function(module1) {
-                var freeGlobal = __webpack_require__(45), freeExports = exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, freeProcess = freeModule && freeModule.exports === freeExports && freeGlobal.process;
+                var freeGlobal = __webpack_require__(45), freeExports = !0 && exports1 && !exports1.nodeType && exports1, freeModule = freeExports && "object" == typeof module1 && module1 && !module1.nodeType && module1, freeProcess = freeModule && freeModule.exports === freeExports && freeGlobal.process;
                 module1.exports = function() {
                     try {
                         // Use `util.types` for Node.js 10+.
@@ -4357,7 +4367,7 @@
             // as the regeneratorRuntime namespace. Otherwise create a new empty
             // object. Either way, the resulting object will be used to initialize
             // the regeneratorRuntime variable at the top of this file.
-            module1.exports);
+            0 ? void 0 : module1.exports);
             try {
                 regeneratorRuntime = runtime;
             } catch (accidentalStrictMode) {
@@ -4747,7 +4757,7 @@
         /***/ },
         /* 248 */ /***/ function(module1, exports1) {
             module1.exports = function(fn) {
-                return -1 !== Function.toString.call(fn).indexOf("[native code]");
+                return Function.toString.call(fn).indexOf("[native code]") !== -1;
             }, module1.exports.default = module1.exports, module1.exports.__esModule = !0;
         /***/ },
         /* 249 */ /***/ function(module1, exports1, __webpack_require__) {
@@ -6066,7 +6076,7 @@
                                         var error = this._matchPattern(counter, this.CODE_PATTERN[code]);
                                         error < bestMatch.error && (bestMatch.code = code, bestMatch.error = error);
                                     }
-                                    if (bestMatch.end = i, -1 === bestMatch.code || bestMatch.error > this.AVG_CODE_ERROR) return null;
+                                    if (bestMatch.end = i, bestMatch.code === -1 || bestMatch.error > this.AVG_CODE_ERROR) return null;
                                     return this.CODE_PATTERN[bestMatch.code] && (bestMatch.correction.bar = this.calculateCorrection(this.CODE_PATTERN[bestMatch.code], counter, this.MODULE_INDICES.bar), bestMatch.correction.space = this.calculateCorrection(this.CODE_PATTERN[bestMatch.code], counter, this.MODULE_INDICES.space)), bestMatch;
                                 }
                                 counter[++counterPos] = 1, isWhite = !isWhite;
@@ -6486,7 +6496,7 @@
                                 }
                                 counter[++counterPos] = 1, isWhite = !isWhite;
                             }
-                            return null;
+                            return 0 ? bestMatch : null;
                         }
                     },
                     {
@@ -6921,7 +6931,7 @@
                         value: function(offset) {
                             var end = offset + 7;
                             if (end > this._counters.length) return -1;
-                            for(var barThreshold = this._computeAlternatingThreshold(offset, end), spaceThreshold = this._computeAlternatingThreshold(offset + 1, end), bitmask = 64, threshold = 0, pattern = 0, i = 0; i < 7; i++)threshold = (1 & i) == 0 ? barThreshold : spaceThreshold, this._counters[offset + i] > threshold && (pattern |= bitmask), bitmask >>= 1;
+                            for(var barThreshold = this._computeAlternatingThreshold(offset, end), spaceThreshold = this._computeAlternatingThreshold(offset + 1, end), bitmask = 1 << 7 - 1, threshold = 0, pattern = 0, i = 0; i < 7; i++)threshold = (1 & i) == 0 ? barThreshold : spaceThreshold, this._counters[offset + i] > threshold && (pattern |= bitmask), bitmask >>= 1;
                             return pattern;
                         }
                     },
@@ -6944,7 +6954,7 @@
                         value: function() {
                             for(var start = this._nextUnset(this._row), end = start, i = 1; i < this._counters.length; i++){
                                 var pattern = this._toPattern(i);
-                                if (-1 !== pattern && this._isStartEnd(pattern)) return(// TODO: Look for whitespace ahead
+                                if (pattern !== -1 && this._isStartEnd(pattern)) return(// TODO: Look for whitespace ahead
                                 start += this._sumCounters(0, i), end = start + this._sumCounters(i, i + 8), {
                                     start: start,
                                     end: end,
@@ -8064,7 +8074,7 @@
                         value: function(charArray, index, maxWeight) {
                             var arrayToCheck = charArray.slice(0, index), length = arrayToCheck.length;
                             return code_93_reader_ALPHABET[arrayToCheck.reduce(function(sum, _char3, i) {
-                                return sum + ((-1 * i + (length - 1)) % maxWeight + 1) * code_93_reader_ALPHABET.indexOf(_char3.charCodeAt(0));
+                                return sum + ((-+i + (length - 1)) % maxWeight + 1) * code_93_reader_ALPHABET.indexOf(_char3.charCodeAt(0));
                             }, 0) % 47] === charArray[index].charCodeAt(0);
                         }
                     },
@@ -8551,7 +8561,7 @@
                         }
                     };
                 }
-            }, config_config = {
+            }, QuaggaConfig = 0 ? void 0 : {
                 inputStream: {
                     name: "Live",
                     type: "LiveStream",
@@ -8655,7 +8665,7 @@
                         notloadedImgs.splice(x, 1);
                         for(var y = 0; y < htmlImagesSrcArray.length; y++){
                             var imgName = htmlImagesSrcArray[y].substr(htmlImagesSrcArray[y].lastIndexOf("/"));
-                            if (-1 !== loadedImg.src.lastIndexOf(imgName)) {
+                            if (loadedImg.src.lastIndexOf(imgName) !== -1) {
                                 htmlImagesArray[y] = {
                                     img: loadedImg
                                 };
@@ -8781,7 +8791,7 @@
                             (null === (_config4 = _config) || void 0 === _config4 ? void 0 : _config4.type) !== "LiveStream" && this.setAttribute("currentTime", time.toString());
                         },
                         addEventListener: function(event, f, bool) {
-                            -1 !== _eventNames.indexOf(event) ? (_eventHandlers[event] || (_eventHandlers[event] = []), _eventHandlers[event].push(f)) : video.addEventListener(event, f, bool);
+                            _eventNames.indexOf(event) !== -1 ? (_eventHandlers[event] || (_eventHandlers[event] = []), _eventHandlers[event].push(f)) : video.addEventListener(event, f, bool);
                         },
                         clearEventHandlers: function() {
                             _eventNames.forEach(function(eventName) {
@@ -8902,7 +8912,7 @@
                             frameIdx = time;
                         },
                         addEventListener: function(event, f) {
-                            -1 !== _eventNames.indexOf(event) && (_eventHandlers[event] || (_eventHandlers[event] = []), _eventHandlers[event].push(f));
+                            _eventNames.indexOf(event) !== -1 && (_eventHandlers[event] || (_eventHandlers[event] = []), _eventHandlers[event].push(f));
                         },
                         clearEventHandlers: function() {
                             Object.keys(_eventHandlers).forEach(function(ind) {
@@ -9374,7 +9384,7 @@
                         cb = function(err) {
                             err ? reject(err) : resolve();
                         };
-                    })), quaggaInstance.context.config = merge_default()({}, config_config, config), quaggaInstance.context.config.numOfWorkers > 0 && (quaggaInstance.context.config.numOfWorkers = 0), imageWrapper ? (quaggaInstance.context.onUIThread = !1, quaggaInstance.initializeData(imageWrapper), cb && cb()) : quaggaInstance.initInputStream(cb), promise;
+                    })), quaggaInstance.context.config = merge_default()({}, QuaggaConfig, config), quaggaInstance.context.config.numOfWorkers > 0 && (quaggaInstance.context.config.numOfWorkers = 0), imageWrapper ? (quaggaInstance.context.onUIThread = !1, quaggaInstance.initializeData(imageWrapper), cb && cb()) : quaggaInstance.initInputStream(cb), promise;
                 },
                 start: function() {
                     return instance.start();

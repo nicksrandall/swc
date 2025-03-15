@@ -1,4 +1,6 @@
 var MS_PER_SECOND = 1000, MS_PER_MINUTE = 60 * 1000, MS_PER_HOUR = 60 * 1000 * 60, MS_PER_400_YEARS = 60 * 1000 * 60 * 3506328;
+var MS_PER_SECOND = 1000, MS_PER_MINUTE = 60000, MS_PER_HOUR = 3600000, MS_PER_400_YEARS = 12622780800000;
+var MS_PER_SECOND = 1000, MS_PER_MINUTE = 60 * 1000, MS_PER_HOUR = 60 * 1000 * 60, MS_PER_400_YEARS = (365 * 400 + 97) * 24 * (60 * 1000 * 60);
 // actual modulo - handles negative numbers (for dates before 1970):
 function mod$1(dividend, divisor) {
     return (dividend % divisor + divisor) % divisor;
@@ -95,3 +97,5 @@ function toDate() {
     return new Date(this.valueOf());
 }
 console.log(60 * 1000 * 60 * 3506328);
+console.log(12622780800000);
+console.log((365 * 400 + 97) * 24 * (60 * 1000 * 60));

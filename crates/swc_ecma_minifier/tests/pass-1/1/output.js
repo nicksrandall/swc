@@ -17,3 +17,7 @@ condString.toUpperCase, foo();
 condString.toUpperCase, foo(), foo();
 condString.toUpperCase, foo(), 0;
 condString.toUpperCase;
+foo(), foo();
+condString.toUpperCase;
+foo();
+condString.toUpperCase;

@@ -766,7 +766,7 @@
                 return d;
             }
             function wc(a) {
-                return 0 != (a = -1073741825 & a.pendingLanes) ? a : 1073741824 & a ? 1073741824 : 0;
+                return 0 != (a = a.pendingLanes & -1073741825) ? a : 1073741824 & a ? 1073741824 : 0;
             }
             function xc() {
                 var a = qc;
@@ -2174,7 +2174,7 @@
                                         u = m;
                                         break a;
                                     case 3:
-                                        m.flags = -65537 & m.flags | 128;
+                                        m.flags = m.flags & -65537 | 128;
                                     case 0:
                                         if (null == (q = "function" == typeof (m = w.payload) ? m.call(y, u, q) : m)) break a;
                                         u = A({}, u, q);
@@ -2318,11 +2318,11 @@
                             if (jh(a)) throw Error(p(418));
                             b = Kf(c.nextSibling);
                             var d = dh;
-                            b && ih(a, b) ? gh(d, c) : (a.flags = -4097 & a.flags | 2, I = !1, dh = a);
+                            b && ih(a, b) ? gh(d, c) : (a.flags = a.flags & -4097 | 2, I = !1, dh = a);
                         }
                     } else {
                         if (jh(a)) throw Error(p(418));
-                        a.flags = -4097 & a.flags | 2, I = !1, dh = a;
+                        a.flags = a.flags & -4097 | 2, I = !1, dh = a;
                     }
                 }
             }
@@ -4220,7 +4220,7 @@
                                 break;
                             case 4:
                                 if (Bk(a, d), (4194240 & d) === d) break;
-                                for(e = -1, b = a.eventTimes; 0 < d;){
+                                for(b = a.eventTimes, e = -1; 0 < d;){
                                     var g = 31 - nc(d);
                                     f = 1 << g, (g = b[g]) > e && (e = g), d &= ~f;
                                 }
@@ -4693,9 +4693,9 @@
                         if (null !== (c = function(a, b) {
                             switch(ch(b), b.tag){
                                 case 1:
-                                    return Yf(b.type) && Zf(), 65536 & (a = b.flags) ? (b.flags = -65537 & a | 128, b) : null;
+                                    return Yf(b.type) && Zf(), 65536 & (a = b.flags) ? (b.flags = a & -65537 | 128, b) : null;
                                 case 3:
-                                    return Gh(), E(Vf), E(H), Lh(), 0 != (65536 & (a = b.flags)) && 0 == (128 & a) ? (b.flags = -65537 & a | 128, b) : null;
+                                    return Gh(), E(Vf), E(H), Lh(), 0 != (65536 & (a = b.flags)) && 0 == (128 & a) ? (b.flags = a & -65537 | 128, b) : null;
                                 case 5:
                                     return Ih(b), null;
                                 case 13:
@@ -4703,7 +4703,7 @@
                                         if (null === b.alternate) throw Error(p(340));
                                         nh();
                                     }
-                                    return 65536 & (a = b.flags) ? (b.flags = -65537 & a | 128, b) : null;
+                                    return 65536 & (a = b.flags) ? (b.flags = a & -65537 | 128, b) : null;
                                 case 19:
                                     return E(K), null;
                                 case 4:
@@ -5297,6 +5297,20 @@
                                 }
                                 for(eh = Kf(b.stateNode.containerInfo.firstChild), dh = b, I = !0, fh = null, c = zh(b, null, d, c), b.child = c; c;)c.flags = -3 & c.flags | 4096, c = c.sibling;
                             } else {
+                            if (d = g.element, f.isDehydrated) if (f = {
+                                element: d,
+                                isDehydrated: !1,
+                                cache: g.cache,
+                                pendingSuspenseBoundaries: g.pendingSuspenseBoundaries,
+                                transitions: g.transitions
+                            }, b.updateQueue.baseState = f, b.memoizedState = f, 256 & b.flags) {
+                                b = rj(a, b, d, c, e = Error(p(423)));
+                                break a;
+                            } else if (d !== e) {
+                                b = rj(a, b, d, c, e = Error(p(424)));
+                                break a;
+                            } else for(eh = Kf(b.stateNode.containerInfo.firstChild), dh = b, I = !0, fh = null, c = zh(b, null, d, c), b.child = c; c;)c.flags = c.flags & -3 | 4096, c = c.sibling;
+                            else {
                                 if (nh(), d === e) {
                                     b = gj(a, b, c);
                                     break a;

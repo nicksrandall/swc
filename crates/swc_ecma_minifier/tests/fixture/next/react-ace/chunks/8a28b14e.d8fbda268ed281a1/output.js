@@ -4,61 +4,102 @@
     ],
     {
         /***/ 3239: /***/ function(module, __unused_webpack_exports, __webpack_require__) {
-            var global, define, _require, require, normalizeModule, lookup, root;
-            /* module decorator */ module = __webpack_require__.nmd(module), (global = function() {
-                return this;
-            }()) || "undefined" == typeof window || (global = window), (define = function(module, deps, payload) {
-                if ("string" != typeof module) {
-                    define.original ? define.original.apply(this, arguments) : (console.error("dropping module because define wasn't a string."), console.trace());
-                    return;
+            /* module decorator */ module = __webpack_require__.nmd(module), /* ***** BEGIN LICENSE BLOCK *****
+             * Distributed under the BSD license:
+             *
+             * Copyright (c) 2010, Ajax.org B.V.
+             * All rights reserved.
+             *
+             * Redistribution and use in source and binary forms, with or without
+             * modification, are permitted provided that the following conditions are met:
+             *     * Redistributions of source code must retain the above copyright
+             *       notice, this list of conditions and the following disclaimer.
+             *     * Redistributions in binary form must reproduce the above copyright
+             *       notice, this list of conditions and the following disclaimer in the
+             *       documentation and/or other materials provided with the distribution.
+             *     * Neither the name of Ajax.org B.V. nor the
+             *       names of its contributors may be used to endorse or promote products
+             *       derived from this software without specific prior written permission.
+             *
+             * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+             * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+             * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+             * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
+             * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+             * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+             * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+             * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+             * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+             * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+             *
+             * ***** END LICENSE BLOCK ***** */ /**
+             * Define a module along with a payload
+             * @param module a name for the payload
+             * @param payload a function to call with (require, exports, module) params
+             */ function() {
+                var global = function() {
+                    return this;
+                }();
+                if (global || "undefined" == typeof window || (global = window), "undefined" == typeof requirejs) {
+                    var root, define = function(module, deps, payload) {
+                        if ("string" != typeof module) {
+                            define.original ? define.original.apply(this, arguments) : (console.error("dropping module because define wasn't a string."), console.trace());
+                            return;
+                        }
+                        2 == arguments.length && (payload = deps), define.modules[module] || (define.payloads[module] = payload, define.modules[module] = null);
+                    };
+                    define.modules = {}, define.payloads = {};
+                    /**
+                 * Get at functionality define()ed using the function above
+                 */ var _require = function(parentId, module, callback) {
+                        if ("string" == typeof module) {
+                            var payload = lookup(parentId, module);
+                            if (void 0 != payload) return callback && callback(), payload;
+                        } else if ("[object Array]" === Object.prototype.toString.call(module)) {
+                            for(var params = [], i = 0, l = module.length; i < l; ++i){
+                                var dep = lookup(parentId, module[i]);
+                                if (void 0 == dep && require.original) return;
+                                params.push(dep);
+                            }
+                            return callback && callback.apply(null, params) || !0;
+                        }
+                    }, require = function(module, callback) {
+                        var packagedModule = _require("", module, callback);
+                        return void 0 == packagedModule && require.original ? require.original.apply(this, arguments) : packagedModule;
+                    }, normalizeModule = function(parentId, moduleName) {
+                        // normalize plugin requires
+                        if (moduleName.indexOf("!") !== -1) {
+                            var chunks = moduleName.split("!");
+                            return normalizeModule(parentId, chunks[0]) + "!" + normalizeModule(parentId, chunks[1]);
+                        }
+                        // normalize relative requires
+                        if ("." == moduleName.charAt(0)) for(moduleName = parentId.split("/").slice(0, -1).join("/") + "/" + moduleName; moduleName.indexOf(".") !== -1 && previous != moduleName;){
+                            var previous = moduleName;
+                            moduleName = moduleName.replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
+                        }
+                        return moduleName;
+                    }, lookup = function(parentId, moduleName) {
+                        moduleName = normalizeModule(parentId, moduleName);
+                        var module = define.modules[moduleName];
+                        if (!module) {
+                            if ("function" == typeof (module = define.payloads[moduleName])) {
+                                var exports = {}, mod = {
+                                    id: moduleName,
+                                    uri: "",
+                                    exports: exports,
+                                    packaged: !0
+                                };
+                                exports = module(function(module, callback) {
+                                    return _require(moduleName, module, callback);
+                                }, exports, mod) || mod.exports, define.modules[moduleName] = exports, delete define.payloads[moduleName];
+                            }
+                            module = define.modules[moduleName] = exports || module;
+                        }
+                        return module;
+                    };
+                    root = global, global.ace || (global.ace = {}), (root = global.ace).define && root.define.packaged || (define.original = root.define, root.define = define, root.define.packaged = !0), root.require && root.require.packaged || (require.original = root.require, root.require = require, root.require.packaged = !0);
                 }
-                2 == arguments.length && (payload = deps), define.modules[module] || (define.payloads[module] = payload, define.modules[module] = null);
-            }).modules = {}, define.payloads = {}, _require = function(parentId, module, callback) {
-                if ("string" == typeof module) {
-                    var payload = lookup(parentId, module);
-                    if (void 0 != payload) return callback && callback(), payload;
-                } else if ("[object Array]" === Object.prototype.toString.call(module)) {
-                    for(var params = [], i = 0, l = module.length; i < l; ++i){
-                        var dep = lookup(parentId, module[i]);
-                        if (void 0 == dep && require.original) return;
-                        params.push(dep);
-                    }
-                    return callback && callback.apply(null, params) || !0;
-                }
-            }, require = function(module, callback) {
-                var packagedModule = _require("", module, callback);
-                return void 0 == packagedModule && require.original ? require.original.apply(this, arguments) : packagedModule;
-            }, normalizeModule = function(parentId, moduleName) {
-                // normalize plugin requires
-                if (-1 !== moduleName.indexOf("!")) {
-                    var chunks = moduleName.split("!");
-                    return normalizeModule(parentId, chunks[0]) + "!" + normalizeModule(parentId, chunks[1]);
-                }
-                // normalize relative requires
-                if ("." == moduleName.charAt(0)) for(moduleName = parentId.split("/").slice(0, -1).join("/") + "/" + moduleName; -1 !== moduleName.indexOf(".") && previous != moduleName;){
-                    var previous = moduleName;
-                    moduleName = moduleName.replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
-                }
-                return moduleName;
-            }, lookup = function(parentId, moduleName) {
-                moduleName = normalizeModule(parentId, moduleName);
-                var module = define.modules[moduleName];
-                if (!module) {
-                    if ("function" == typeof (module = define.payloads[moduleName])) {
-                        var exports = {}, mod = {
-                            id: moduleName,
-                            uri: "",
-                            exports: exports,
-                            packaged: !0
-                        };
-                        exports = module(function(module, callback) {
-                            return _require(moduleName, module, callback);
-                        }, exports, mod) || mod.exports, define.modules[moduleName] = exports, delete define.payloads[moduleName];
-                    }
-                    module = define.modules[moduleName] = exports || module;
-                }
-                return module;
-            }, root = global, global.ace || (global.ace = {}), (root = global.ace).define && root.define.packaged || (define.original = root.define, root.define = define, root.define.packaged = !0), root.require && root.require.packaged || (require.original = root.require, root.require = require, root.require.packaged = !0), ace.define("ace/lib/fixoldbrowsers", [
+            }(), ace.define("ace/lib/fixoldbrowsers", [
                 "require",
                 "exports",
                 "module"
@@ -128,20 +169,20 @@
                 }, exports.createFragment = function(element) {
                     return (element ? element.ownerDocument : document).createDocumentFragment();
                 }, exports.hasCssClass = function(el, name) {
-                    return -1 !== (el.className + "").split(/\s+/g).indexOf(name);
+                    return (el.className + "").split(/\s+/g).indexOf(name) !== -1;
                 }, exports.addCssClass = function(el, name) {
                     exports.hasCssClass(el, name) || (el.className += " " + name);
                 }, exports.removeCssClass = function(el, name) {
                     for(var classes = el.className.split(/\s+/g);;){
                         var index = classes.indexOf(name);
-                        if (-1 == index) break;
+                        if (index == -1) break;
                         classes.splice(index, 1);
                     }
                     el.className = classes.join(" ");
                 }, exports.toggleCssClass = function(el, name) {
                     for(var classes = el.className.split(/\s+/g), add = !0;;){
                         var index = classes.indexOf(name);
-                        if (-1 == index) break;
+                        if (index == -1) break;
                         add = !1, classes.splice(index, 1);
                     }
                     return add && classes.push(name), el.className = classes.join(" "), add;
@@ -490,7 +531,7 @@
                     }
                     if (useragent.isChromeOS && 8 & hashId) {
                         if (callback(e, hashId, keyCode), e.defaultPrevented) return;
-                        hashId &= -9;
+                        hashId &= ~8;
                     }
                     return (!!hashId || keyCode in keys.FUNCTION_KEYS || keyCode in keys.PRINTABLE_KEYS) && callback(e, hashId, keyCode);
                 }
@@ -564,14 +605,14 @@
                         return 0 == this.compare(row, column);
                     }, this.compareRange = function(range) {
                         var cmp, end = range.end, start = range.start;
-                        return 1 == (cmp = this.compare(end.row, end.column)) ? 1 == (cmp = this.compare(start.row, start.column)) ? 2 : +(0 == cmp) : -1 == cmp ? -2 : -1 == (cmp = this.compare(start.row, start.column)) ? -1 : 42 * (1 == cmp);
+                        return 1 == (cmp = this.compare(end.row, end.column)) ? 1 == (cmp = this.compare(start.row, start.column)) ? 2 : +(0 == cmp) : cmp == -1 ? -2 : (cmp = this.compare(start.row, start.column)) == -1 ? -1 : 42 * (1 == cmp);
                     }, this.comparePoint = function(p) {
                         return this.compare(p.row, p.column);
                     }, this.containsRange = function(range) {
                         return 0 == this.comparePoint(range.start) && 0 == this.comparePoint(range.end);
                     }, this.intersects = function(range) {
                         var cmp = this.compareRange(range);
-                        return -1 == cmp || 0 == cmp || 1 == cmp;
+                        return cmp == -1 || 0 == cmp || 1 == cmp;
                     }, this.isEnd = function(row, column) {
                         return this.end.row == row && this.end.column == column;
                     }, this.isStart = function(row, column) {
@@ -615,7 +656,7 @@
                     }, this.extend = function(row, column) {
                         var cmp = this.compare(row, column);
                         if (0 == cmp) return this;
-                        if (-1 == cmp) var start = {
+                        if (cmp == -1) var start = {
                             row: row,
                             column: column
                         };
@@ -869,7 +910,7 @@
                             if ("historyRedo" == e.inputType) return host.execCommand("redo");
                         }
                         var data = text.value, inserted = sendText(data, !0);
-                        (data.length > 500 || valueResetRegex.test(inserted) || isMobile && lastSelectionStart < 1 && lastSelectionStart == lastSelectionEnd) && resetSelection();
+                        (data.length > 400 + 100 || valueResetRegex.test(inserted) || isMobile && lastSelectionStart < 1 && lastSelectionStart == lastSelectionEnd) && resetSelection();
                     }, handleClipboardData = function(e, data, forceIEMime) {
                         var clipboardData = e.clipboardData || window.clipboardData;
                         if (clipboardData && !BROKEN_SETDATA) {
@@ -1042,7 +1083,7 @@
                         var anchor, editor = this.editor, cursor = editor.renderer.screenToTextCoordinates(this.x, this.y);
                         if (this.$clickSelection) {
                             var cmp = this.$clickSelection.comparePoint(cursor);
-                            if (-1 == cmp) anchor = this.$clickSelection.end;
+                            if (cmp == -1) anchor = this.$clickSelection.end;
                             else if (1 == cmp) anchor = this.$clickSelection.start;
                             else {
                                 var orientedRange = calcRangeOrientation(this.$clickSelection, cursor);
@@ -1055,9 +1096,9 @@
                         var anchor, editor = this.editor, cursor = editor.renderer.screenToTextCoordinates(this.x, this.y), range = editor.selection[unitName](cursor.row, cursor.column);
                         if (this.$clickSelection) {
                             var cmpStart = this.$clickSelection.comparePoint(range.start), cmpEnd = this.$clickSelection.comparePoint(range.end);
-                            if (-1 == cmpStart && cmpEnd <= 0) anchor = this.$clickSelection.end, (range.end.row != cursor.row || range.end.column != cursor.column) && (cursor = range.start);
+                            if (cmpStart == -1 && cmpEnd <= 0) anchor = this.$clickSelection.end, (range.end.row != cursor.row || range.end.column != cursor.column) && (cursor = range.start);
                             else if (1 == cmpEnd && cmpStart >= 0) anchor = this.$clickSelection.start, (range.start.row != cursor.row || range.start.column != cursor.column) && (cursor = range.end);
-                            else if (-1 == cmpStart && 1 == cmpEnd) cursor = range.end, anchor = range.start;
+                            else if (cmpStart == -1 && 1 == cmpEnd) cursor = range.end, anchor = range.start;
                             else {
                                 var orientedRange = calcRangeOrientation(this.$clickSelection, cursor);
                                 cursor = orientedRange.cursor, anchor = orientedRange.anchor;
@@ -1277,7 +1318,7 @@
                         }).x.left, offsets.x.right), nearestYOffset = Math.min(offsets.y.top, offsets.y.bottom), scrollCursor = {
                             row: cursor1.row,
                             column: cursor1.column
-                        }, nearestXOffset / characterWidth <= 2 && (scrollCursor.column += offsets.x.left < offsets.x.right ? -3 : 2), nearestYOffset / lineHeight <= 1 && (scrollCursor.row += offsets.y.top < offsets.y.bottom ? -1 : 1), vScroll = cursor1.row != scrollCursor.row, hScroll = cursor1.column != scrollCursor.column, vMovement1 = !prevCursor || cursor1.row != prevCursor.row, vScroll || hScroll && !vMovement1 ? autoScrollStartTime ? now1 - autoScrollStartTime >= 200 && editor.renderer.scrollCursorIntoView(scrollCursor) : autoScrollStartTime = now1 : autoScrollStartTime = null;
+                        }, nearestXOffset / characterWidth <= 2 && (scrollCursor.column += offsets.x.left < offsets.x.right ? -3 : +2), nearestYOffset / lineHeight <= 1 && (scrollCursor.row += offsets.y.top < offsets.y.bottom ? -1 : +1), vScroll = cursor1.row != scrollCursor.row, hScroll = cursor1.column != scrollCursor.column, vMovement1 = !prevCursor || cursor1.row != prevCursor.row, vScroll || hScroll && !vMovement1 ? autoScrollStartTime ? now1 - autoScrollStartTime >= 200 && editor.renderer.scrollCursorIntoView(scrollCursor) : autoScrollStartTime = now1 : autoScrollStartTime = null;
                     }
                     function addDragMarker() {
                         range = editor.selection.toOrientedRange(), dragSelectionMarker = editor.session.addMarker(range, "ace_selection", editor.getSelectionStyle()), editor.clearSelection(), editor.isFocused() && editor.renderer.$cursorLayer.setBlinking(!1), clearInterval(timerId), onDragInterval(), timerId = setInterval(onDragInterval, 20), counter = 0, event.addListener(document, "mousemove", onMouseMove);
@@ -1638,7 +1679,7 @@
                         var old = handlers[eventName], disabled = handlers._disabled_[eventName];
                         disabled || (handlers._disabled_[eventName] = disabled = []), disabled.push(old);
                         var i = disabled.indexOf(callback);
-                        -1 != i && disabled.splice(i, 1);
+                        i != -1 && disabled.splice(i, 1);
                     }
                     handlers[eventName] = callback;
                 }, EventEmitter.removeDefaultHandler = function(eventName, callback) {
@@ -1648,19 +1689,19 @@
                         if (handlers[eventName] == callback) disabled && this.setDefaultHandler(eventName, disabled.pop());
                         else if (disabled) {
                             var i = disabled.indexOf(callback);
-                            -1 != i && disabled.splice(i, 1);
+                            i != -1 && disabled.splice(i, 1);
                         }
                     }
                 }, EventEmitter.on = EventEmitter.addEventListener = function(eventName, callback, capturing) {
                     this._eventRegistry = this._eventRegistry || {};
                     var listeners = this._eventRegistry[eventName];
-                    return listeners || (listeners = this._eventRegistry[eventName] = []), -1 == listeners.indexOf(callback) && listeners[capturing ? "unshift" : "push"](callback), callback;
+                    return listeners || (listeners = this._eventRegistry[eventName] = []), listeners.indexOf(callback) == -1 && listeners[capturing ? "unshift" : "push"](callback), callback;
                 }, EventEmitter.off = EventEmitter.removeListener = EventEmitter.removeEventListener = function(eventName, callback) {
                     this._eventRegistry = this._eventRegistry || {};
                     var listeners = this._eventRegistry[eventName];
                     if (listeners) {
                         var index = listeners.indexOf(callback);
-                        -1 !== index && listeners.splice(index, 1);
+                        index !== -1 && listeners.splice(index, 1);
                     }
                 }, EventEmitter.removeAllListeners = function(eventName) {
                     eventName || (this._eventRegistry = this._defaultHandlers = void 0), this._eventRegistry && (this._eventRegistry[eventName] = void 0), this._defaultHandlers && (this._defaultHandlers[eventName] = void 0);
@@ -1999,11 +2040,11 @@
                         if (kb) {
                             "function" != typeof kb || kb.handleKeyboard || (kb.handleKeyboard = kb);
                             var i = this.$handlers.indexOf(kb);
-                            -1 != i && this.$handlers.splice(i, 1), void 0 == pos ? this.$handlers.push(kb) : this.$handlers.splice(pos, 0, kb), -1 == i && kb.attach && kb.attach(this.$editor);
+                            i != -1 && this.$handlers.splice(i, 1), void 0 == pos ? this.$handlers.push(kb) : this.$handlers.splice(pos, 0, kb), i == -1 && kb.attach && kb.attach(this.$editor);
                         }
                     }, this.removeKeyboardHandler = function(kb) {
                         var i = this.$handlers.indexOf(kb);
-                        return -1 != i && (this.$handlers.splice(i, 1), kb.detach && kb.detach(this.$editor), !0);
+                        return i != -1 && (this.$handlers.splice(i, 1), kb.detach && kb.detach(this.$editor), !0);
                     }, this.getKeyboardHandler = function() {
                         return this.$handlers[this.$handlers.length - 1];
                     }, this.getStatusText = function() {
@@ -2012,8 +2053,8 @@
                             return h.getStatusText && h.getStatusText(editor, data) || "";
                         }).filter(Boolean).join(" ");
                     }, this.$callKeyboardHandlers = function(hashId, keyString, keyCode, e) {
-                        for(var toExecute, success = !1, commands = this.$editor.commands, i = this.$handlers.length; i-- && (!(toExecute = this.$handlers[i].handleKeyboard(this.$data, hashId, keyString, keyCode, e)) || !toExecute.command || ((success = "null" == toExecute.command || commands.exec(toExecute.command, this.$editor, toExecute.args, e)) && e && -1 != hashId && !0 != toExecute.passEvent && !0 != toExecute.command.passEvent && event.stopEvent(e), !success)););
-                        return success || -1 != hashId || (toExecute = {
+                        for(var toExecute, success = !1, commands = this.$editor.commands, i = this.$handlers.length; i-- && (!(toExecute = this.$handlers[i].handleKeyboard(this.$data, hashId, keyString, keyCode, e)) || !toExecute.command || ((success = "null" == toExecute.command || commands.exec(toExecute.command, this.$editor, toExecute.args, e)) && e && hashId != -1 && !0 != toExecute.passEvent && !0 != toExecute.command.passEvent && event.stopEvent(e), !success)););
+                        return success || hashId != -1 || (toExecute = {
                             command: "insertstring"
                         }, success = commands.exec("insertstring", this.$editor, keyString)), success && this.$editor._signal && this.$editor._signal("keyboardActivity", toExecute), success;
                     }, this.onCommandKey = function(e, hashId, keyCode) {
@@ -2494,6 +2535,11 @@
                                 } else condPos = -1;
                             }
                             if (impTab[newState][6]) -1 == condPos && (condPos = ix);
+                            }(chars, charTypes, classes, ix), action = 0xf0 & (newState = impTab[prevState][newClass]), newState &= 0x0f, levels[ix] = newLevel = impTab[newState][5], action > 0) if (0x10 == action) {
+                                for(i = condPos; i < ix; i++)levels[i] = 1;
+                                condPos = -1;
+                            } else condPos = -1;
+                            if (0, impTab[newState][6]) condPos == -1 && (condPos = ix);
                             else if (condPos > -1) {
                                 for(i = condPos; i < ix; i++)levels[i] = newLevel;
                                 condPos = -1;
@@ -2956,7 +3002,7 @@
                             return y ? "(?:" : x;
                         });
                     }, this.createSplitterRegexp = function(src, flag) {
-                        if (-1 != src.indexOf("(?=")) {
+                        if (src.indexOf("(?=") != -1) {
                             var stack = 0, inChClass = !1, lastCapture = {};
                             src.replace(/(\\.)|(\((?:\?[=!])?)|(\))|([\[\]])/g, function(m, esc, parenOpen, parenClose, square, index) {
                                 return inChClass ? inChClass = "]" != square : square ? inChClass = !0 : parenClose ? (stack == lastCapture.stack && (lastCapture.end = index + 1, lastCapture.stack = -1), stack--) : parenOpen && (stack++, 1 != parenOpen.length && (lastCapture.stack = stack, lastCapture.start = index)), m;
@@ -3376,7 +3422,7 @@
                     }), this.add("string_dquotes", "insertion", function(state, action, editor, session, text) {
                         var quotes = session.$mode.$quotes || defaultQuotes;
                         if (1 == text.length && quotes[text]) {
-                            if (this.lineCommentStart && -1 != this.lineCommentStart.indexOf(text)) return;
+                            if (this.lineCommentStart && this.lineCommentStart.indexOf(text) != -1) return;
                             initContext(editor);
                             var selection = editor.getSelectionRange(), selected = session.doc.getTextRange(selection);
                             if ("" !== selected && (1 != selected.length || !quotes[selected]) && editor.getWrapBehavioursEnabled()) return getWrapped(selection, selected, text, text);
@@ -4365,7 +4411,7 @@
                         var minEmptyLength = 1 / 0;
                         iter(function(line, i) {
                             var indent = line.search(/\S/);
-                            -1 !== indent ? (indent < minIndent && (minIndent = indent), shouldRemove && !testRemove(line, i) && (shouldRemove = !1)) : minEmptyLength > line.length && (minEmptyLength = line.length);
+                            indent !== -1 ? (indent < minIndent && (minIndent = indent), shouldRemove && !testRemove(line, i) && (shouldRemove = !1)) : minEmptyLength > line.length && (minEmptyLength = line.length);
                         }), minIndent == 1 / 0 && (minIndent = minEmptyLength, ignoreBlankLines = !1, shouldRemove = !1), insertAtTabStop && minIndent % tabSize != 0 && (minIndent = Math.floor(minIndent / tabSize) * tabSize), iter(shouldRemove ? uncomment : comment);
                     }, this.toggleBlockComment = function(state, session, range, cursor) {
                         var comment = this.blockComment;
@@ -4377,7 +4423,7 @@
                             if (token && /comment/.test(token.type)) {
                                 for(; token && /comment/.test(token.type);){
                                     var startRow, colDiff, startRange, endRange, i = token.value.indexOf(comment.start);
-                                    if (-1 != i) {
+                                    if (i != -1) {
                                         var row = iterator.getCurrentTokenRow(), column = iterator.getCurrentTokenColumn() + i;
                                         startRange = new Range(row, column, row, column + comment.start.length);
                                         break;
@@ -4386,7 +4432,7 @@
                                 }
                                 for(var iterator = new TokenIterator(session, cursor.row, cursor.column), token = iterator.getCurrentToken(); token && /comment/.test(token.type);){
                                     var i = token.value.indexOf(comment.end);
-                                    if (-1 != i) {
+                                    if (i != -1) {
                                         var row = iterator.getCurrentTokenRow(), column = iterator.getCurrentTokenColumn() + i;
                                         endRange = new Range(row, column, row, column + comment.end.length);
                                         break;
@@ -4815,7 +4861,7 @@
                                     break;
                                 }
                             }
-                            self1.currentLine = currentLine, -1 == endLine && (endLine = currentLine), startLine <= endLine && self1.fireUpdateEvent(startLine, endLine);
+                            self1.currentLine = currentLine, endLine == -1 && (endLine = currentLine), startLine <= endLine && self1.fireUpdateEvent(startLine, endLine);
                         }
                     };
                 };
@@ -4920,7 +4966,7 @@
                         var fold, cmp, lastEnd = 0, folds = this.folds, isNewRow = !0;
                         null == endRow && (endRow = this.end.row, endColumn = this.end.column);
                         for(var i = 0; i < folds.length; i++){
-                            if (-1 == (cmp = (fold = folds[i]).range.compareStart(endRow, endColumn))) {
+                            if ((cmp = (fold = folds[i]).range.compareStart(endRow, endColumn)) == -1) {
                                 callback(null, endRow, endColumn, lastEnd, isNewRow);
                                 return;
                             }
@@ -4930,7 +4976,7 @@
                         callback(null, endRow, endColumn, lastEnd, isNewRow);
                     }, this.getNextFoldTo = function(row, column) {
                         for(var fold, cmp, i = 0; i < this.folds.length; i++){
-                            if (-1 == (cmp = (fold = this.folds[i]).range.compareEnd(row, column))) return {
+                            if ((cmp = (fold = this.folds[i]).range.compareEnd(row, column)) == -1) return {
                                 fold: fold,
                                 kind: "after"
                             };
@@ -5150,7 +5196,7 @@
                         for(var folds = foldLine.folds, i = 0; i < folds.length; i++){
                             var range = folds[i].range;
                             if (range.contains(row, column)) {
-                                if (1 == side && range.isEnd(row, column) && !range.isEmpty() || -1 == side && range.isStart(row, column) && !range.isEmpty()) continue;
+                                if (1 == side && range.isEnd(row, column) && !range.isEmpty() || side == -1 && range.isStart(row, column) && !range.isEmpty()) continue;
                                 return folds[i];
                             }
                         }
@@ -5160,10 +5206,10 @@
                         for(var i = 0; i < foldLines.length; i++){
                             var cmp = foldLines[i].range.compareRange(range);
                             if (2 != cmp) {
-                                if (-2 == cmp) break;
+                                if (cmp == -2) break;
                                 for(var folds = foldLines[i].folds, j = 0; j < folds.length; j++){
                                     var fold = folds[j];
-                                    if (-2 == (cmp = fold.range.compareRange(range))) break;
+                                    if ((cmp = fold.range.compareRange(range)) == -2) break;
                                     if (2 != cmp) {
                                         if (42 == cmp) break;
                                         foundFolds.push(fold);
@@ -5191,17 +5237,17 @@
                             }
                         }, i = 0; i < foldLine.folds.length; i++){
                             var cmp = (fold = foldLine.folds[i]).range.compareEnd(row, column);
-                            if (-1 == cmp) {
+                            if (cmp == -1) {
                                 str = this.getLine(fold.start.row).substring(lastFold.end.column, fold.start.column);
                                 break;
                             }
                             if (0 === cmp) return null;
                             lastFold = fold;
                         }
-                        return (str || (str = this.getLine(fold.start.row).substring(lastFold.end.column)), -1 == trim) ? str.substring(0, column - lastFold.end.column) : 1 == trim ? str.substring(column - lastFold.end.column) : str;
+                        return (str || (str = this.getLine(fold.start.row).substring(lastFold.end.column)), trim == -1) ? str.substring(0, column - lastFold.end.column) : 1 == trim ? str.substring(column - lastFold.end.column) : str;
                     }, this.getFoldLine = function(docRow, startFoldLine) {
                         var foldData = this.$foldData, i = 0;
-                        for(startFoldLine && (i = foldData.indexOf(startFoldLine)), -1 == i && (i = 0); i < foldData.length; i++){
+                        for(startFoldLine && (i = foldData.indexOf(startFoldLine)), i == -1 && (i = 0); i < foldData.length; i++){
                             var foldLine = foldData[i];
                             if (foldLine.start.row <= docRow && foldLine.end.row >= docRow) return foldLine;
                             if (foldLine.end.row > docRow) break;
@@ -5209,7 +5255,7 @@
                         return null;
                     }, this.getNextFoldLine = function(docRow, startFoldLine) {
                         var foldData = this.$foldData, i = 0;
-                        for(startFoldLine && (i = foldData.indexOf(startFoldLine)), -1 == i && (i = 0); i < foldData.length; i++){
+                        for(startFoldLine && (i = foldData.indexOf(startFoldLine)), i == -1 && (i = 0); i < foldData.length; i++){
                             var foldLine = foldData[i];
                             if (foldLine.end.row >= docRow) return foldLine;
                         }
@@ -5372,9 +5418,9 @@
                                 while (token && re.test(token.type))
                                 iterator.stepForward();
                             }
-                            if (range.start.row = iterator.getCurrentTokenRow(), range.start.column = iterator.getCurrentTokenColumn() + 2, iterator = new TokenIterator(this, row, column), -1 != dir) {
+                            if (range.start.row = iterator.getCurrentTokenRow(), range.start.column = iterator.getCurrentTokenColumn() + 2, iterator = new TokenIterator(this, row, column), dir != -1) {
                                 var lastRow = -1;
-                                do if (token = iterator.stepForward(), -1 == lastRow) {
+                                do if (token = iterator.stepForward(), lastRow == -1) {
                                     var state = this.getState(iterator.$row);
                                     re.test(state) || (lastRow = iterator.$row);
                                 } else if (iterator.$row > lastRow) break;
@@ -5437,7 +5483,7 @@
                             i--;
                         }
                         return {
-                            range: -1 !== i && range,
+                            range: i !== -1 && range,
                             firstRange: firstRange
                         };
                     }, this.onFoldWidgetClick = function(row, e) {
@@ -5452,7 +5498,7 @@
                         }
                     }, this.$toggleFoldWidget = function(row, options) {
                         if (this.getFoldWidget) {
-                            var type = this.getFoldWidget(row), line = this.getLine(row), dir = "end" === type ? -1 : 1, fold = this.getFoldAt(row, -1 === dir ? 0 : line.length, dir);
+                            var type = this.getFoldWidget(row), line = this.getLine(row), dir = "end" === type ? -1 : 1, fold = this.getFoldAt(row, dir === -1 ? 0 : line.length, dir);
                             if (fold) return options.children || options.all ? this.removeFold(fold) : this.expandFold(fold), fold;
                             var range = this.getFoldWidgetRange(row, !0);
                             if (range && !range.isMultiLine() && (fold = this.getFoldAt(range.start.row, range.start.column, 1)) && range.isEqual(fold.range)) return this.removeFold(fold), fold;
@@ -5884,7 +5930,7 @@
                     }, this.undoChanges = function(deltas, dontSelect) {
                         if (deltas.length) {
                             this.$fromUndo = !0;
-                            for(var i = deltas.length - 1; -1 != i; i--){
+                            for(var i = deltas.length - 1; i != -1; i--){
                                 var delta = deltas[i];
                                 "insert" == delta.action || "remove" == delta.action ? this.doc.revertDelta(delta) : delta.folds && this.addFolds(delta.folds);
                             }
@@ -5912,7 +5958,7 @@
                                     range = isInsert(delta) ? Range.fromPoints(delta.start, delta.end) : Range.fromPoints(delta.start, delta.start);
                                     continue;
                                 }
-                                isInsert(delta) ? (point = delta.start, -1 == range.compare(point.row, point.column) && range.setStart(point), point = delta.end, 1 == range.compare(point.row, point.column) && range.setEnd(point)) : (point = delta.start, -1 == range.compare(point.row, point.column) && (range = Range.fromPoints(delta.start, delta.start)));
+                                isInsert(delta) ? (point = delta.start, range.compare(point.row, point.column) == -1 && range.setStart(point), point = delta.end, 1 == range.compare(point.row, point.column) && range.setEnd(point)) : (point = delta.start, range.compare(point.row, point.column) == -1 && (range = Range.fromPoints(delta.start, delta.start)));
                             } // skip folds
                         }
                         return range;
@@ -6057,6 +6103,21 @@
                                 }
                             }
                         } else {
+                            var args = Array(len);
+                            args.unshift(firstRow, 0);
+                            var arr = useWrapMode ? this.$wrapData : this.$rowLengthCache;
+                            arr.splice.apply(arr, args);
+                            var foldLines = this.$foldData, foldLine = this.getFoldLine(firstRow), idx = 0;
+                            if (foldLine) {
+                                var cmp = foldLine.range.compareInside(start.row, start.column);
+                                0 == cmp ? (foldLine = foldLine.split(start.row, start.column)) && (foldLine.shiftRow(len), foldLine.addRemoveChars(lastRow, 0, end.column - start.column)) : cmp == -1 && (foldLine.addRemoveChars(firstRow, 0, end.column - start.column), foldLine.shiftRow(len)), idx = foldLines.indexOf(foldLine) + 1;
+                            }
+                            for(; idx < foldLines.length; idx++){
+                                var foldLine = foldLines[idx];
+                                foldLine.start.row >= firstRow && foldLine.shiftRow(len);
+                            }
+                        }
+                        else {
                             len = Math.abs(delta.start.column - delta.end.column), "remove" === action && (removedFolds = this.getFoldsInRange(delta), this.removeFolds(removedFolds), len = -len);
                             var foldLine = this.getFoldLine(firstRow);
                             foldLine && foldLine.addRemoveChars(firstRow, start.column, len);
@@ -6275,7 +6336,7 @@
                             }
                         },
                         get: function() {
-                            return this.getUseWrapMode() ? -1 == this.$wrap ? "printMargin" : this.getWrapLimitRange().min ? this.$wrap : "free" : "off";
+                            return this.getUseWrapMode() ? this.$wrap == -1 ? "printMargin" : this.getWrapLimitRange().min ? this.$wrap : "free" : "off";
                         },
                         handlesSet: !0
                     },
@@ -6381,7 +6442,7 @@
                         if (options.$isMultiLine) {
                             var prevRange, len = re.length, maxRow = lines.length - len;
                             outer: for(var row = re.offset || 0; row <= maxRow; row++){
-                                for(var j = 0; j < len; j++)if (-1 == lines[row + j].search(re[j])) continue outer;
+                                for(var j = 0; j < len; j++)if (lines[row + j].search(re[j]) == -1) continue outer;
                                 var startLine = lines[row], line = lines[row + len - 1], startIndex = startLine.length - startLine.match(re[0])[0].length, endIndex = line.match(re[len - 1])[0].length;
                                 prevRange && prevRange.end.row === row && prevRange.end.column > startIndex || (ranges.push(prevRange = new Range(row, startIndex, row + len - 1, endIndex)), len > 2 && (row = row + len - 2));
                             }
@@ -6464,8 +6525,8 @@
                             var startRow = backwards ? row - len + 1 : row;
                             if (!(startRow < 0 || startRow + len > session.getLength())) {
                                 var line = session.getLine(startRow), startIndex = line.search(re[0]);
-                                if ((backwards || !(startIndex < offset)) && -1 !== startIndex) {
-                                    for(var i = 1; i < len; i++)if (-1 == (line = session.getLine(startRow + i)).search(re[i])) return;
+                                if ((backwards || !(startIndex < offset)) && startIndex !== -1) {
+                                    for(var i = 1; i < len; i++)if ((line = session.getLine(startRow + i)).search(re[i]) == -1) return;
                                     var endIndex = line.match(re[len - 1])[0].length;
                                     if ((!backwards || !(endIndex > offset)) && callback(startRow, startIndex, startRow + len - 1, endIndex)) return !0;
                                 }
@@ -6530,7 +6591,7 @@
                             if (cmdGroup == command) delete ckb[keyId];
                             else if (Array.isArray(cmdGroup)) {
                                 var i = cmdGroup.indexOf(command);
-                                -1 != i && (cmdGroup.splice(i, 1), 1 == cmdGroup.length && (ckb[keyId] = cmdGroup[0]));
+                                i != -1 && (cmdGroup.splice(i, 1), 1 == cmdGroup.length && (ckb[keyId] = cmdGroup[0]));
                             }
                         }
                     }, this.bindKey = function(key, command, position) {
@@ -6542,7 +6603,7 @@
                             });
                             key.split("|").forEach(function(keyPart) {
                                 var chain = "";
-                                if (-1 != keyPart.indexOf(" ")) {
+                                if (keyPart.indexOf(" ") != -1) {
                                     var parts = keyPart.split(/\s+/);
                                     keyPart = parts.pop(), parts.forEach(function(keyPart) {
                                         var binding = this.parseKeys(keyPart), id = KEY_MODS[binding.hashId] + binding.key;
@@ -6566,6 +6627,16 @@
                                 commands.splice(i, 0, command);
                             }
                         } else delete ckb[keyId];
+                        if (command) if (!ckb[keyId] || this.$singleCommand) ckb[keyId] = command;
+                        else {
+                            Array.isArray(ckb[keyId]) ? (i = ckb[keyId].indexOf(command)) != -1 && ckb[keyId].splice(i, 1) : ckb[keyId] = [
+                                ckb[keyId]
+                            ], "number" != typeof position && (position = getPosition(command));
+                            var commands = ckb[keyId];
+                            for(i = 0; i < commands.length && !(getPosition(commands[i]) > position); i++);
+                            commands.splice(i, 0, command);
+                        }
+                        else delete ckb[keyId];
                     }, this.addCommands = function(commands) {
                         commands && Object.keys(commands).forEach(function(name) {
                             var command = commands[name];
@@ -6616,7 +6687,7 @@
                             var key = KEY_MODS[hashId] + keyString, command = this.commandKeyBinding[key];
                             return (data.$keyChain && (data.$keyChain += " " + key, command = this.commandKeyBinding[data.$keyChain] || command), command && ("chainKeys" == command || "chainKeys" == command[command.length - 1])) ? (data.$keyChain = data.$keyChain || key, {
                                 command: "null"
-                            }) : (data.$keyChain && (hashId && 4 != hashId || 1 != keyString.length ? (-1 == hashId || keyCode > 0) && (data.$keyChain = "") : data.$keyChain = data.$keyChain.slice(0, -key.length - 1)), {
+                            }) : (data.$keyChain && (hashId && 4 != hashId || 1 != keyString.length ? (hashId == -1 || keyCode > 0) && (data.$keyChain = "") : data.$keyChain = data.$keyChain.slice(0, -key.length - 1)), {
                                 command: command
                             });
                         }
@@ -7819,8 +7890,8 @@
                                 var text = e.args;
                                 void 0 === this.mergeNextCommand && (this.mergeNextCommand = !0), shouldMerge = shouldMerge && this.mergeNextCommand && // previous command allows to coalesce with
                                 (!/\s/.test(text) || /\s/.test(prev.args)), this.mergeNextCommand = !0;
-                            } else shouldMerge = shouldMerge && -1 !== mergeableCommands.indexOf(e.command.name); // the command is mergeable
-                            "always" != this.$mergeUndoDeltas && Date.now() - this.sequenceStartTime > 2000 && (shouldMerge = !1), shouldMerge ? this.session.mergeUndoDeltas = !0 : -1 !== mergeableCommands.indexOf(e.command.name) && (this.sequenceStartTime = Date.now());
+                            } else shouldMerge = shouldMerge && mergeableCommands.indexOf(e.command.name) !== -1; // the command is mergeable
+                            "always" != this.$mergeUndoDeltas && Date.now() - this.sequenceStartTime > 2000 && (shouldMerge = !1), shouldMerge ? this.session.mergeUndoDeltas = !0 : mergeableCommands.indexOf(e.command.name) !== -1 && (this.sequenceStartTime = Date.now());
                         }
                     }, this.setKeyboardHandler = function(keyboardHandler, cb) {
                         if (keyboardHandler && "string" == typeof keyboardHandler && "ace" != keyboardHandler) {
@@ -7856,7 +7927,7 @@
                     }, this.getSession = function() {
                         return this.session;
                     }, this.setValue = function(val, cursorPos) {
-                        return this.session.doc.setValue(val), cursorPos ? 1 == cursorPos ? this.navigateFileEnd() : -1 == cursorPos && this.navigateFileStart() : this.selectAll(), val;
+                        return this.session.doc.setValue(val), cursorPos ? 1 == cursorPos ? this.navigateFileEnd() : cursorPos == -1 && this.navigateFileStart() : this.selectAll(), val;
                     }, this.getValue = function() {
                         return this.session.getValue();
                     }, this.getSelection = function() {
@@ -7916,18 +7987,18 @@
                                         session.removeMarker(session.$tagHighlight), session.$tagHighlight = null;
                                         return;
                                     }
-                                    if (-1 !== token.type.indexOf("tag-open") && !(token = iterator.stepForward())) return;
+                                    if (token.type.indexOf("tag-open") !== -1 && !(token = iterator.stepForward())) return;
                                     var tag = token.value, currentTag = token.value, depth = 0, prevToken = iterator.stepBackward();
-                                    if ("<" === prevToken.value) do prevToken = token, (token = iterator.stepForward()) && (-1 !== token.type.indexOf("tag-name") ? tag === (currentTag = token.value) && ("<" === prevToken.value ? depth++ : "</" === prevToken.value && depth--) : tag === currentTag && "/>" === token.value && // self closing tag
+                                    if ("<" === prevToken.value) do prevToken = token, (token = iterator.stepForward()) && (token.type.indexOf("tag-name") !== -1 ? tag === (currentTag = token.value) && ("<" === prevToken.value ? depth++ : "</" === prevToken.value && depth--) : tag === currentTag && "/>" === token.value && // self closing tag
                                     depth--);
                                     while (token && depth >= 0)
                                     else {
                                         do if (token = prevToken, prevToken = iterator.stepBackward(), token) {
-                                            if (-1 !== token.type.indexOf("tag-name")) tag === token.value && ("<" === prevToken.value ? depth++ : "</" === prevToken.value && depth--);
+                                            if (token.type.indexOf("tag-name") !== -1) tag === token.value && ("<" === prevToken.value ? depth++ : "</" === prevToken.value && depth--);
                                             else if ("/>" === token.value) {
                                                 for(// self closing tag
                                                 var stepCount = 0, tmpToken = prevToken; tmpToken;){
-                                                    if (-1 !== tmpToken.type.indexOf("tag-name") && tmpToken.value === tag) {
+                                                    if (tmpToken.type.indexOf("tag-name") !== -1 && tmpToken.value === tag) {
                                                         depth--;
                                                         break;
                                                     }
@@ -8077,7 +8148,7 @@
                             transform && (text === transform.text || this.inVirtualSelectionMode || (this.session.mergeUndoDeltas = !1, this.mergeNextCommand = !1), text = transform.text);
                         }
                         if ("\t" == text && (text = this.session.getTabString()), this.selection.isEmpty()) {
-                            if (this.session.getOverwrite() && -1 == text.indexOf("\n")) {
+                            if (this.session.getOverwrite() && text.indexOf("\n") == -1) {
                                 var range = new Range.fromPoints(cursor, cursor);
                                 range.end.column += text.length, this.session.remove(range);
                             }
@@ -8455,7 +8526,7 @@
                         var rows, moved, selection = this.selection;
                         if (!selection.inMultiSelectMode || this.inVirtualSelectionMode) {
                             var range = selection.toOrientedRange();
-                            rows = this.$getSelectedRows(range), moved = this.session.$moveLines(rows.first, rows.last, copy ? 0 : dir), copy && -1 == dir && (moved = 0), range.moveBy(moved, 0), selection.fromOrientedRange(range);
+                            rows = this.$getSelectedRows(range), moved = this.session.$moveLines(rows.first, rows.last, copy ? 0 : dir), copy && dir == -1 && (moved = 0), range.moveBy(moved, 0), selection.fromOrientedRange(range);
                         } else {
                             var ranges = selection.rangeList.ranges;
                             selection.rangeList.detach(this.session), this.inVirtualSelectionMode = !0;
@@ -8468,7 +8539,7 @@
                                     if (copy && subRows.first != last || !copy && subRows.first > last + 1) break;
                                     last = subRows.last;
                                 }
-                                for(i--, diff = this.session.$moveLines(first, last, copy ? 0 : dir), copy && -1 == dir && (rangeIndex = i + 1); rangeIndex <= i;)ranges[rangeIndex].moveBy(diff, 0), rangeIndex++;
+                                for(i--, diff = this.session.$moveLines(first, last, copy ? 0 : dir), copy && dir == -1 && (rangeIndex = i + 1); rangeIndex <= i;)ranges[rangeIndex].moveBy(diff, 0), rangeIndex++;
                                 copy || (diff = 0), totalDiff += diff;
                             }
                             selection.fromOrientedRange(selection.ranges[0]), selection.rangeList.attach(this.session), this.inVirtualSelectionMode = !1;
@@ -8559,19 +8630,19 @@
                                         case ")":
                                         case "]":
                                         case "}":
-                                            depth[bracketType]--, -1 === depth[bracketType] && (matchType = "bracket", found = !0);
+                                            depth[bracketType]--, depth[bracketType] === -1 && (matchType = "bracket", found = !0);
                                     }
-                                } else -1 !== token.type.indexOf("tag-name") && (isNaN(depth[token.value]) && (depth[token.value] = 0), "<" === prevToken.value ? depth[token.value]++ : "</" === prevToken.value && depth[token.value]--, -1 === depth[token.value] && (matchType = "tag", found = !0));
+                                } else token.type.indexOf("tag-name") !== -1 && (isNaN(depth[token.value]) && (depth[token.value] = 0), "<" === prevToken.value ? depth[token.value]++ : "</" === prevToken.value && depth[token.value]--, depth[token.value] === -1 && (matchType = "tag", found = !0));
                                 found || (prevToken = token, token = iterator.stepForward(), i = 0);
                             }while (token && !found)
                             if (matchType) {
                                 if ("bracket" === matchType) !(range = this.session.getBracketRange(cursor)) && (pos = (range = new Range(iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() + i - 1, iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() + i - 1)).start, (expand || pos.row === cursor.row && 2 > Math.abs(pos.column - cursor.column)) && (range = this.session.getBracketRange(pos)));
                                 else if ("tag" === matchType) {
-                                    if (!token || -1 === token.type.indexOf("tag-name")) return;
+                                    if (!token || token.type.indexOf("tag-name") === -1) return;
                                     var tag = token.value;
                                     if (0 === (range = new Range(iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() - 2, iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() - 2)).compare(cursor.row, cursor.column)) {
                                         found = !1;
-                                        do token = prevToken, (prevToken = iterator.stepBackward()) && (-1 !== prevToken.type.indexOf("tag-close") && range.setEnd(iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() + 1), token.value === tag && -1 !== token.type.indexOf("tag-name") && ("<" === prevToken.value ? depth[tag]++ : "</" === prevToken.value && depth[tag]--, 0 === depth[tag] && (found = !0)));
+                                        do token = prevToken, (prevToken = iterator.stepBackward()) && (prevToken.type.indexOf("tag-close") !== -1 && range.setEnd(iterator.getCurrentTokenRow(), iterator.getCurrentTokenColumn() + 1), token.value === tag && token.type.indexOf("tag-name") !== -1 && ("<" === prevToken.value ? depth[tag]++ : "</" === prevToken.value && depth[tag]--, 0 === depth[tag] && (found = !0)));
                                         while (prevToken && !found)
                                     }
                                     token && token.type.indexOf("tag-name") && (pos = range.start).row == cursor.row && 2 > Math.abs(pos.column - cursor.column) && (pos = range.end);
@@ -8994,6 +9065,16 @@
                                                         ].filter(Boolean);
                                                         shift(d1, c1, -1);
                                                     }
+                                                else if (i1 && !i2) cmp(d1.start, c1.end) >= 0 ? shift(d1, c1, -1) : (0 >= cmp(d1.start, c1.start) || shift(d1, Range.fromPoints(c1.start, d1.start), -1), shift(c1, d1, +1));
+                                                else if (!i1 && i2) cmp(c1.start, d1.end) >= 0 ? shift(c1, d1, -1) : (0 >= cmp(c1.start, d1.start) || shift(c1, Range.fromPoints(d1.start, c1.start), -1), shift(d1, c1, +1));
+                                                else if (!i1 && !i2) if (cmp(c1.start, d1.end) >= 0) shift(c1, d1, -1);
+                                                else {
+                                                    if (!(0 >= cmp(c1.end, d1.start))) return 0 > cmp(d1.start, c1.start) && (before = d1, d1 = splitDelta(d1, c1.start)), cmp(d1.end, c1.end) > 0 && (after = splitDelta(d1, c1.end)), shiftPos(c1.end, d1.start, d1.end, -1), after && !before && (d1.lines = after.lines, d1.start = after.start, d1.end = after.end, after = d1), [
+                                                        c1,
+                                                        before,
+                                                        after
+                                                    ].filter(Boolean);
+                                                    shift(d1, c1, -1);
                                                 }
                                                 return [
                                                     c1,
@@ -9069,6 +9150,25 @@
                             if (!(0 >= cmp(d2.end, d1.start))) return null;
                             shift(d1, d2, -1);
                         }
+                    if (i1 && i2) if (cmp(d2.start, d1.end) >= 0) shift(d2, d1, -1);
+                    else {
+                        if (!(0 >= cmp(d2.start, d1.start))) return null;
+                        shift(d1, d2, +1);
+                    }
+                    else if (i1 && !i2) if (cmp(d2.start, d1.end) >= 0) shift(d2, d1, -1);
+                    else {
+                        if (!(0 >= cmp(d2.end, d1.start))) return null;
+                        shift(d1, d2, -1);
+                    }
+                    else if (!i1 && i2) if (cmp(d2.start, d1.start) >= 0) shift(d2, d1, +1);
+                    else {
+                        if (!(0 >= cmp(d2.start, d1.start))) return null;
+                        shift(d1, d2, +1);
+                    }
+                    else if (!i1 && !i2) if (cmp(d2.start, d1.start) >= 0) shift(d2, d1, +1);
+                    else {
+                        if (!(0 >= cmp(d2.end, d1.start))) return null;
+                        shift(d1, d2, -1);
                     }
                     return [
                         d2,
@@ -9185,7 +9285,7 @@
                                 text: []
                             });
                             var annoText = annotation.text;
-                            annoText = annoText ? lang.escapeHTML(annoText) : annotation.html || "", -1 === rowInfo.text.indexOf(annoText) && rowInfo.text.push(annoText);
+                            annoText = annoText ? lang.escapeHTML(annoText) : annotation.html || "", rowInfo.text.indexOf(annoText) === -1 && rowInfo.text.push(annoText);
                             var type = annotation.type;
                             "error" == type ? rowInfo.className = " ace_error" : "warning" == type && " ace_error" != rowInfo.className ? rowInfo.className = " ace_warning" : "info" != type || rowInfo.className || (rowInfo.className = " ace_info");
                         }
@@ -9319,7 +9419,7 @@
                     }, this.setMarkers = function(markers) {
                         this.markers = markers;
                     }, this.elt = function(className, css) {
-                        var x = -1 != this.i && this.element.childNodes[this.i];
+                        var x = this.i != -1 && this.element.childNodes[this.i];
                         x ? this.i++ : (x = document.createElement("div"), this.element.appendChild(x), this.i = -1), x.style.cssText = css, x.className = className;
                     }, this.update = function(config) {
                         if (config) {
@@ -9337,7 +9437,7 @@
                                     } else "fullLine" == marker.type ? this.drawFullLineMarker(html, range, marker.clazz, config) : "screenLine" == marker.type ? this.drawScreenLineMarker(html, range, marker.clazz, config) : range.isMultiLine() ? "text" == marker.type ? this.drawTextMarker(html, range, marker.clazz, config) : this.drawMultiLineMarker(html, range, marker.clazz, config) : this.drawSingleLineMarker(html, range, marker.clazz + " ace_start ace_br15", config);
                                 }
                             }
-                            if (-1 != this.i) for(; this.i < this.element.childElementCount;)this.element.removeChild(this.element.lastChild);
+                            if (this.i != -1) for(; this.i < this.element.childElementCount;)this.element.removeChild(this.element.lastChild);
                         }
                     }, this.$getTop = function(row, layerConfig) {
                         return (row - layerConfig.firstRowScreen) * layerConfig.lineHeight;
@@ -10560,7 +10660,7 @@ margin: 0 10px;\
                                 containerEl.className = "ace_layer ace_print-margin-layer", this.$printMarginEl = dom.createElement("div"), this.$printMarginEl.className = "ace_print-margin", containerEl.appendChild(this.$printMarginEl), this.content.insertBefore(containerEl, this.content.firstChild);
                             }
                             var style = this.$printMarginEl.style;
-                            style.left = Math.round(this.characterWidth * this.$printMarginColumn + this.$padding) + "px", style.visibility = this.$showPrintMargin ? "visible" : "hidden", this.session && -1 == this.session.$wrap && this.adjustWrapLimit();
+                            style.left = Math.round(this.characterWidth * this.$printMarginColumn + this.$padding) + "px", style.visibility = this.$showPrintMargin ? "visible" : "hidden", this.session && this.session.$wrap == -1 && this.adjustWrapLimit();
                         }
                     }, this.getContainerElement = function() {
                         return this.container;
@@ -11276,7 +11376,7 @@ margin: 0 10px;\
                     }, this.detach = function() {
                         this.session.removeMarker(this.pos && this.pos.markerId), this.hideOtherMarkers(), this.doc.off("change", this.$onUpdate), this.session.selection.off("changeCursor", this.$onCursorChange), this.session.setUndoSelect(!0), this.session = null;
                     }, this.cancel = function() {
-                        if (-1 !== this.$undoStackDepth) {
+                        if (this.$undoStackDepth !== -1) {
                             for(var undoManager = this.session.getUndoManager(), undosRequired = (undoManager.$undoStack || undoManager.$undostack).length - this.$undoStackDepth, i = 0; i < undosRequired; i++)undoManager.undo(this.session, !0);
                             this.selectionBefore && this.session.selection.fromJSON(this.selectionBefore);
                         }
@@ -11658,7 +11758,7 @@ margin: 0 10px;\
                         if (range.marker) {
                             this.session.removeMarker(range.marker);
                             var index = this.session.$selectionMarkers.indexOf(range);
-                            -1 != index && this.session.$selectionMarkers.splice(index, 1), this.session.selectionMarkerCount = this.session.$selectionMarkers.length;
+                            index != -1 && this.session.$selectionMarkers.splice(index, 1), this.session.selectionMarkerCount = this.session.$selectionMarkers.length;
                         }
                     }, this.removeSelectionMarkers = function(ranges) {
                         for(var markerList = this.session.$selectionMarkers, i = ranges.length; i--;){
@@ -11666,7 +11766,7 @@ margin: 0 10px;\
                             if (range.marker) {
                                 this.session.removeMarker(range.marker);
                                 var index = markerList.indexOf(range);
-                                -1 != index && markerList.splice(index, 1);
+                                index != -1 && markerList.splice(index, 1);
                             }
                         }
                         this.session.selectionMarkerCount = markerList.length;
@@ -11774,9 +11874,9 @@ margin: 0 10px;\
                         sel.fromOrientedRange(sel.ranges[0]);
                     }, this.selectMore = function(dir, skip, stopAtFirst) {
                         var session = this.session, range = session.multiSelect.toOrientedRange();
-                        if (!range.isEmpty() || ((range = session.getWordRange(range.start.row, range.start.column)).cursor = -1 == dir ? range.start : range.end, this.multiSelect.addRange(range), !stopAtFirst)) {
-                            var needle = session.getTextRange(range), newRange = (search.$options.wrap = !0, search.$options.needle = needle, search.$options.backwards = -1 == dir, search.find(session));
-                            newRange && (newRange.cursor = -1 == dir ? newRange.start : newRange.end, this.session.unfold(newRange), this.multiSelect.addRange(newRange), this.renderer.scrollCursorIntoView(null, 0.5)), skip && this.multiSelect.substractPoint(range.cursor);
+                        if (!range.isEmpty() || ((range = session.getWordRange(range.start.row, range.start.column)).cursor = dir == -1 ? range.start : range.end, this.multiSelect.addRange(range), !stopAtFirst)) {
+                            var needle = session.getTextRange(range), newRange = (search.$options.wrap = !0, search.$options.needle = needle, search.$options.backwards = dir == -1, search.find(session));
+                            newRange && (newRange.cursor = dir == -1 ? newRange.start : newRange.end, this.session.unfold(newRange), this.multiSelect.addRange(newRange), this.renderer.scrollCursorIntoView(null, 0.5)), skip && this.multiSelect.substractPoint(range.cursor);
                         }
                     }, this.alignCursors = function() {
                         var session = this.session, sel = session.multiSelect, ranges = sel.ranges, row = -1, sameRowRanges = ranges.filter(function(r) {
@@ -11789,7 +11889,7 @@ margin: 0 10px;\
                             });
                             var maxCol = 0, minSpace = 1 / 0, spaceOffsets = ranges.map(function(r) {
                                 var p = r.cursor, spaceOffset = session.getLine(p.row).substr(p.column).search(/\S/g);
-                                return -1 == spaceOffset && (spaceOffset = 0), p.column > maxCol && (maxCol = p.column), spaceOffset < minSpace && (minSpace = spaceOffset), spaceOffset;
+                                return spaceOffset == -1 && (spaceOffset = 0), p.column > maxCol && (maxCol = p.column), spaceOffset < minSpace && (minSpace = spaceOffset), spaceOffset;
                             });
                             ranges.forEach(function(r, i) {
                                 var p = r.cursor, l = maxCol - p.column, d = spaceOffsets[i] - minSpace;
@@ -11865,10 +11965,10 @@ margin: 0 10px;\
                         return null;
                     }, this.indentationBlock = function(session, row, column) {
                         var re = /\S/, line = session.getLine(row), startLevel = line.search(re);
-                        if (-1 != startLevel) {
+                        if (startLevel != -1) {
                             for(var startColumn = column || line.length, maxRow = session.getLength(), startRow = row, endRow = row; ++row < maxRow;){
                                 var level = session.getLine(row).search(re);
-                                if (-1 != level) {
+                                if (level != -1) {
                                     if (level <= startLevel) {
                                         var token = session.getTokenAt(row, 0);
                                         if (!token || "string" !== token.type) break;
