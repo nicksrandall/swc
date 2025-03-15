@@ -1,14 +1,13 @@
+use std::borrow::Cow;
 #[cfg(feature = "debug")]
 use std::fmt::{self, Debug, Display, Formatter};
 #[cfg(feature = "debug")]
 use std::thread;
-use std::{borrow::Cow, time::Instant};
 
 #[cfg(feature = "pretty_assertions")]
 use pretty_assertions::assert_eq;
 use swc_common::pass::{CompilerPass, Repeated};
 use swc_ecma_ast::*;
-use swc_ecma_transforms_optimization::simplify::{expr_simplifier, ExprSimplifierConfig};
 use swc_ecma_usage_analyzer::marks::Marks;
 use swc_ecma_visit::VisitMutWith;
 #[cfg(debug_assertions)]
@@ -26,7 +25,7 @@ use crate::{
     mode::Mode,
     option::{CompressOptions, MangleOptions},
     program_data::analyze,
-    util::{force_dump_program, now},
+    util::force_dump_program,
 };
 
 mod hoist_decls;
