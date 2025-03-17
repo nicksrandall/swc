@@ -1,11 +1,11 @@
 var foo = {
-    [Symbol.iterator] () {
+    [Symbol.iterator]() {
         return {};
     },
-    [1 + 2] () {
+    [3]() {
         return 3;
     },
-    ["1" + "4"] () {
+    ["14"]() {
         return 14;
-    }
+    },
 };

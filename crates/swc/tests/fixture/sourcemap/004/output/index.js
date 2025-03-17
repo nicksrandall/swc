@@ -7,7 +7,7 @@
             "use strict";
             var r = function(n) {
                 var t = n.data;
-                return _.jsx("div", {
+                return (0, _.jsx)("div", {
                     children: t.foo
                 });
             };

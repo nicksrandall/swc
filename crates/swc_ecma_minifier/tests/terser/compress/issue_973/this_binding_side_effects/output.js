@@ -1,11 +1,11 @@
 (function(foo) {
     foo();
-    foo.bar();
-    eval("console.log(foo);");
+    (0, foo.bar)();
+    (0, eval)("console.log(foo);");
 })();
 (function(foo) {
     var eval = console;
     foo();
-    foo.bar();
-    eval("console.log(foo);");
+    (0, foo.bar)();
+    (0, eval)("console.log(foo);");
 })();

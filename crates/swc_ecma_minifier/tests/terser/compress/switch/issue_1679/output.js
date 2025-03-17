@@ -2,7 +2,7 @@ var a = 100, b = 10;
 function f() {
     switch(--b){
         default:
-        case !function x() {}:
+        case false:
             break;
         case b--:
             a--;

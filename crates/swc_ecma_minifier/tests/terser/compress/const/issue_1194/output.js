@@ -1,9 +1,9 @@
 function f1() {
-    return "X" + "X";
+    return "XX";
 }
 function f2() {
-    return "X" + "X";
+    return "XX";
 }
 function f3() {
-    return "X" + "X";
+    return "XX";
 }

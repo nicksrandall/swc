@@ -1,1 +1,1 @@
-console.log(+42, +"abc");
+console.log(42, NaN);

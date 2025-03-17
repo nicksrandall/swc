@@ -1,4 +1,1 @@
-console.log([
-    1,
-    2
-].length);
+console.log(2);

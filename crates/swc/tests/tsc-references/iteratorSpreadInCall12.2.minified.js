@@ -25,7 +25,5 @@ new class {
     constructor(...s){}
 }(...[
     ...new SymbolIterator,
-    ...[
-        ...new _StringIterator
-    ]
+    ...new _StringIterator
 ]);

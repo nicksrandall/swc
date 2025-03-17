@@ -1,1 +1,1 @@
-typeof __dirname != void 0;
+true;

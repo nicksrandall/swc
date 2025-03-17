@@ -8,16 +8,6 @@ function g() {
     return CONFIG.VALUE;
 }
 function h() {
-    return ({
-        DEBUG: [
-            0
-        ],
-        VALUE: 42
-    }).VALUE;
+    return 42;
 }
-if (({
-    DEBUG: [
-        0
-    ],
-    VALUE: 42
-}).DEBUG[0]) console.debug("foo");
+if (0) console.debug("foo");

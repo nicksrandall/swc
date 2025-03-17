@@ -31,7 +31,7 @@
                 }).exports, k), k.exports));
             var I = M(F());
             var H = ()=>{};
-            A.createContext({});
+            (0, A.createContext)({});
             function V(m = "DEFAULT_TOOLTIP_ID") {}
             M(F());
             var W = "undefined" != typeof window ? A.useLayoutEffect : A.useEffect;
@@ -186,10 +186,10 @@
                 warning: "react-tooltip__warning_KtSkBq"
             };
             var ei = ({})=>{
-                let m = A.useRef(null), S = A.useRef(null), h = A.useRef(null), E = A.useRef(null), [k, R] = A.useState(i), [L, j] = A.useState({}), [B, C] = A.useState({}), [N, $] = A.useState(!1), [D, M] = A.useState(!1), F = A.useRef(null), { anchorRefs: X } = V(t), Y = A.useRef(!1), [z, G] = A.useState([]), J = A.useRef(!1), Q = u || f.includes("click");
+                let m = (0, A.useRef)(null), S = (0, A.useRef)(null), h = (0, A.useRef)(null), E = (0, A.useRef)(null), [k, R] = (0, A.useState)(i), [L, j] = (0, A.useState)({}), [B, C] = (0, A.useState)({}), [N, $] = (0, A.useState)(!1), [D, M] = (0, A.useState)(!1), F = (0, A.useRef)(null), { anchorRefs: X } = V(t), Y = (0, A.useRef)(!1), [z, G] = (0, A.useState)([]), J = (0, A.useRef)(!1), Q = u || f.includes("click");
                 W(()=>(J.current = !0, ()=>{
                         J.current = !1;
-                    }), []), A.useEffect(()=>{
+                    }), []), (0, A.useEffect)(()=>{
                     if (!N) {
                         let m = setTimeout(()=>{
                             M(!1);
@@ -207,13 +207,13 @@
                         J.current && (null == U || U(m), void 0 === q && $(m));
                     }, 10));
                 };
-                A.useEffect(()=>{
+                (0, A.useEffect)(()=>{
                     if (void 0 === q) return ()=>null;
                     q && M(!0);
                     return ()=>{};
                 }, [
                     q
-                ]), A.useEffect(()=>{}, [
+                ]), (0, A.useEffect)(()=>{}, [
                     N
                 ]);
                 let ee = (m = y)=>{}, et = ()=>{}, er = ()=>{}, en = ({})=>{}, ei = (m)=>{
@@ -234,7 +234,7 @@
                 }, es = (m)=>{
                     "Escape" === m.key && Z(!1);
                 }, ec = H(et, 50), ef = H(er, 50);
-                A.useEffect(()=>{
+                (0, A.useEffect)(()=>{
                     var S, h;
                     let E = new Set(X);
                     z.forEach((m)=>{
@@ -291,7 +291,7 @@
                     z,
                     x,
                     f
-                ]), A.useEffect(()=>{
+                ]), (0, A.useEffect)(()=>{
                     let m = null != r ? r : "";
                     !m && t && (m = `[data-tooltip-id='${t}']`);
                     let S = new MutationObserver((S)=>{
@@ -326,7 +326,7 @@
                     t,
                     r,
                     _
-                ]), A.useEffect(()=>{
+                ]), (0, A.useEffect)(()=>{
                     if (P) {
                         en(P);
                         return;
@@ -354,7 +354,7 @@
                     s,
                     a,
                     P
-                ]), A.useEffect(()=>{
+                ]), (0, A.useEffect)(()=>{
                     var m;
                     let S = document.querySelector(`[id='${l}']`), h = [
                         ...z,
@@ -365,9 +365,9 @@
                     l,
                     z,
                     _
-                ]), A.useEffect(()=>()=>{
+                ]), (0, A.useEffect)(()=>()=>{
                         h.current && clearTimeout(h.current), E.current && clearTimeout(E.current);
-                    }, []), A.useEffect(()=>{
+                    }, []), (0, A.useEffect)(()=>{
                     let m = r;
                     if (!m && t && (m = `[data-tooltip-id='${t}']`), !!m) try {
                         let S = Array.from(document.querySelectorAll(m));
@@ -385,12 +385,6 @@
                     role: "tooltip",
                     className: (0, I.default)("react-tooltip", el.tooltip, el[o], e, `react-tooltip__place-${k}`, {
                         [el.show]: ep,
-                let ed = K && N && Object.keys(L).length > 0;
-                return D ? O.jsxs(d, {
-                    id: t,
-                    role: "tooltip",
-                    className: I.default("react-tooltip", el.tooltip, el[o], e, `react-tooltip__place-${k}`, {
-                        [el.show]: ed,
                         [el.fixed]: "fixed" === a,
                         [el.clickable]: T
                     }),
@@ -401,8 +395,8 @@
                     ref: m,
                     children: [
                         K,
-                        O.jsx(d, {
-                            className: I.default("react-tooltip-arrow", el.arrow, n, {
+                        (0, O.jsx)(d, {
+                            className: (0, I.default)("react-tooltip-arrow", el.arrow, n, {
                                 [el.noArrow]: w
                             }),
                             style: B,
@@ -411,20 +405,20 @@
                     ]
                 }) : null;
             };
-            var ea = ({ content: m })=>O.jsx("span", {
+            var ea = ({ content: m })=>(0, O.jsx)("span", {
                     dangerouslySetInnerHTML: {
                         __html: m
                     }
                 });
             var eu = ({ setIsOpen: m })=>{
-                let [S, h] = A.useState(o), [E, k] = A.useState(l), [R, L] = A.useState(u), [j, B] = A.useState(f), [C, N] = A.useState(a), [$, D] = A.useState(T), [M, F] = A.useState(x), [I, H] = A.useState(v), [W, X] = A.useState(c), [Y, z] = A.useState(p), [G, J] = A.useState(g), [Q, Z] = A.useState(null), {} = V(t);
-                A.useEffect(()=>{}, [
+                let [S, h] = (0, A.useState)(o), [E, k] = (0, A.useState)(l), [R, L] = (0, A.useState)(u), [j, B] = (0, A.useState)(f), [C, N] = (0, A.useState)(a), [$, D] = (0, A.useState)(T), [M, F] = (0, A.useState)(x), [I, H] = (0, A.useState)(v), [W, X] = (0, A.useState)(c), [Y, z] = (0, A.useState)(p), [G, J] = (0, A.useState)(g), [Q, Z] = (0, A.useState)(null), {} = V(t);
+                (0, A.useEffect)(()=>{}, [
                     o
-                ]), A.useEffect(()=>{}, [
+                ]), (0, A.useEffect)(()=>{}, [
                     l
-                ]), A.useEffect(()=>{}, [
+                ]), (0, A.useEffect)(()=>{}, [
                     u
-                ]), A.useEffect(()=>{}, [
+                ]), (0, A.useEffect)(()=>{}, [
                     yt,
                     At,
                     Q,
@@ -432,7 +426,7 @@
                     n
                 ]);
                 let ee = d;
-                return r && r({}), E && O.jsx(ea, {}), O.jsx(ei, {});
+                return r && r({}), E && (0, O.jsx)(ea, {}), (0, O.jsx)(ei, {});
             };
         }
     }

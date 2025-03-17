@@ -1,3 +1,1 @@
-console.log(typeof [
-    function() {}
-][0]);
+console.log("function");

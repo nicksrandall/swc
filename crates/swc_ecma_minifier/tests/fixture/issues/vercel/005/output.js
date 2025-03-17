@@ -13,7 +13,7 @@ export default function(value, options) {
                 case "yrs":
                 case "yr":
                 case "y":
-                    return n * y;
+                    return 31557600000 * n;
                 case "weeks":
                 case "week":
                 case "w":
@@ -21,19 +21,19 @@ export default function(value, options) {
                 case "days":
                 case "day":
                 case "d":
-                    return n * d;
+                    return 86400000 * n;
                 case "hours":
                 case "hour":
                 case "hrs":
                 case "hr":
                 case "h":
-                    return n * h;
+                    return 3600000 * n;
                 case "minutes":
                 case "minute":
                 case "mins":
                 case "min":
                 case "m":
-                    return n * m;
+                    return 60000 * n;
                 case "seconds":
                 case "second":
                 case "secs":
@@ -52,10 +52,10 @@ export default function(value, options) {
         }(value);
         if ("number" == typeof value && isFinite(value)) return options?.long ? function(ms) {
             const msAbs = Math.abs(ms);
-            return msAbs >= d ? plural(ms, msAbs, d, "day") : msAbs >= h ? plural(ms, msAbs, h, "hour") : msAbs >= m ? plural(ms, msAbs, m, "minute") : msAbs >= 1000 ? plural(ms, msAbs, 1000, "second") : `${ms} ms`;
+            return msAbs >= 86400000 ? plural(ms, msAbs, 86400000, "day") : msAbs >= 3600000 ? plural(ms, msAbs, 3600000, "hour") : msAbs >= 60000 ? plural(ms, msAbs, 60000, "minute") : msAbs >= 1000 ? plural(ms, msAbs, 1000, "second") : `${ms} ms`;
         }(value) : function(ms) {
             const msAbs = Math.abs(ms);
-            return msAbs >= d ? `${Math.round(ms / d)}d` : msAbs >= h ? `${Math.round(ms / h)}h` : msAbs >= m ? `${Math.round(ms / m)}m` : msAbs >= 1000 ? `${Math.round(ms / 1000)}s` : `${ms}ms`;
+            return msAbs >= 86400000 ? `${Math.round(ms / 86400000)}d` : msAbs >= 3600000 ? `${Math.round(ms / 3600000)}h` : msAbs >= 60000 ? `${Math.round(ms / 60000)}m` : msAbs >= 1000 ? `${Math.round(ms / 1000)}s` : `${ms}ms`;
         }(value);
         throw Error("Value is not a string or number.");
     } catch (error) {

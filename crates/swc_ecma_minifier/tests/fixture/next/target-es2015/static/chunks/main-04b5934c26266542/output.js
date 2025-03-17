@@ -120,10 +120,9 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.addBasePath = function(path, required) {
-                return _normalizeTrailingSlash.normalizePathTrailingSlash(_addPathPrefix.addPathPrefix(path, basePath));
+                return _normalizeTrailingSlash.normalizePathTrailingSlash(_addPathPrefix.addPathPrefix(path, ""));
             };
             var _addPathPrefix = __webpack_require__(5391), _normalizeTrailingSlash = __webpack_require__(2392);
-            const basePath = !1 || "";
             ("function" == typeof exports.default || "object" == typeof exports.default && null !== exports.default) && void 0 === exports.default.__esModule && (Object.defineProperty(exports.default, "__esModule", {
                 value: !0
             }), Object.assign(exports.default, exports), module.exports = exports.default);
@@ -154,10 +153,9 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.hasBasePath = function(path) {
-                return _pathHasPrefix.pathHasPrefix(path, basePath);
+                return _pathHasPrefix.pathHasPrefix(path, "");
             };
             var _pathHasPrefix = __webpack_require__(1259);
-            const basePath = !1 || "";
             ("function" == typeof exports.default || "object" == typeof exports.default && null !== exports.default) && void 0 === exports.default.__esModule && (Object.defineProperty(exports.default, "__esModule", {
                 value: !0
             }), Object.assign(exports.default, exports), module.exports = exports.default);
@@ -262,7 +260,7 @@
             var _async_to_generator = __webpack_require__(932)/* ["default"] */ .Z, _extends = __webpack_require__(6495)/* ["default"] */ .Z, _interop_require_default = __webpack_require__(2648)/* ["default"] */ .Z;
             __webpack_require__(1598)/* ["default"] */ .Z, __webpack_require__(37);
             var _react = _interop_require_default(__webpack_require__(7294)), _headManagerContext = __webpack_require__(8404), _mitt = _interop_require_default(__webpack_require__(5660)), _routerContext = __webpack_require__(3462), _isDynamic = __webpack_require__(8689), _querystring = __webpack_require__(466), _runtimeConfig = __webpack_require__(8027), _utils = __webpack_require__(3794), _portal = __webpack_require__(2207), _headManager = _interop_require_default(__webpack_require__(6007)), _pageLoader = _interop_require_default(__webpack_require__(5181)), _performanceRelayer = _interop_require_default(__webpack_require__(9302)), _routeAnnouncer = __webpack_require__(8982), _router = __webpack_require__(387), _isError = __webpack_require__(676), _imageConfigContext = __webpack_require__(9977), _removeBasePath = __webpack_require__(9320), _hasBasePath = __webpack_require__(4119);
-            const ReactDOM = 0 ? 0 : __webpack_require__(745);
+            const ReactDOM = __webpack_require__(745);
             exports.version = "12.3.2-canary.13", exports.router = router, exports.emitter = _mitt.default();
             const looseToArray = (input)=>[].slice.call(input);
             let initialMatchesMiddleware = !1;
@@ -549,7 +547,7 @@
                             callback,
                             onRootCommit
                         ]
-                    }, 0 ? 0 : /*#__PURE__*/ _react.default.createElement(_react.default.StrictMode, null, elem))), renderPromise;
+                    }, /*#__PURE__*/ _react.default.createElement(_react.default.StrictMode, null, elem))), renderPromise;
             }
             function render(renderingProps) {
                 return _render.apply(this, arguments);
@@ -593,7 +591,7 @@
                             };
                             mod.reportWebVitals(webVitals);
                         });
-                        const pageEntrypoint = 1 ? yield pageLoader.routeLoader.whenEntrypoint(initialData.page) : 0;
+                        const pageEntrypoint = yield pageLoader.routeLoader.whenEntrypoint(initialData.page);
                         if ("error" in pageEntrypoint) throw pageEntrypoint.error;
                         CachedComponent = pageEntrypoint.component;
                     } catch (error1) {
@@ -671,7 +669,7 @@
                     return _routeLoader.getClientBuildManifest().then((manifest)=>manifest.sortedPages);
                 }
                 getMiddleware() {
-                    return window.__MIDDLEWARE_MATCHERS = [] || void 0, window.__MIDDLEWARE_MATCHERS;
+                    return window.__MIDDLEWARE_MATCHERS = [], window.__MIDDLEWARE_MATCHERS;
                 }
                 getDataHref(params) {
                     const { asPath, href, locale } = params, { pathname: hrefPathname, query, search } = _parseRelativeUrl.parseRelativeUrl(href), { pathname: asPathname } = _parseRelativeUrl.parseRelativeUrl(asPath), route = _removeTrailingSlash.removeTrailingSlash(hrefPathname);
@@ -759,10 +757,8 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.removeBasePath = function(path) {
-                return (path = path.slice(basePath.length)).startsWith("/") || (path = "/".concat(path)), path;
-            }, __webpack_require__(4119);
-            const basePath = !1 || "";
-            ("function" == typeof exports.default || "object" == typeof exports.default && null !== exports.default) && void 0 === exports.default.__esModule && (Object.defineProperty(exports.default, "__esModule", {
+                return (path = path.slice(0)).startsWith("/") || (path = "/".concat(path)), path;
+            }, __webpack_require__(4119), ("function" == typeof exports.default || "object" == typeof exports.default && null !== exports.default) && void 0 === exports.default.__esModule && (Object.defineProperty(exports.default, "__esModule", {
                 value: !0
             }), Object.assign(exports.default, exports), module.exports = exports.default);
         /***/ },
@@ -1072,7 +1068,7 @@
                 "beforePopState"
             ];
             function getRouter() {
-                if (!singletonRouter.router) throw Error("No router instance found.\n" + 'You should only use "next/router" on the client side of your app.\n');
+                if (!singletonRouter.router) throw Error('No router instance found.\nYou should only use "next/router" on the client side of your app.\n');
                 return singletonRouter.router;
             }
             // Events is a static property on the router, the router doesn't have to be initialized to use it
@@ -2569,7 +2565,7 @@
                     const autoExportDynamic = _isDynamic.isDynamicRoute(pathname1) && self.__NEXT_DATA__.autoExport;
                     // make sure "as" doesn't start with double slashes or else it can
                     // throw an error as it's considered invalid
-                    if (this.basePath = !1 || "", this.sub = subscription, this.clc = null, this._wrapApp = wrapApp, // make sure to ignore extra popState in safari on navigating
+                    if (this.basePath = "", this.sub = subscription, this.clc = null, this._wrapApp = wrapApp, // make sure to ignore extra popState in safari on navigating
                     // back from external site
                     this.isSsr = !0, this.isLocaleDomain = !1, this.isReady = !!(self.__NEXT_DATA__.gssp || self.__NEXT_DATA__.gip || self.__NEXT_DATA__.appGip && !self.__NEXT_DATA__.gsp || !autoExportDynamic && !self.location.search), this.state = {
                         route,
@@ -2577,7 +2573,7 @@
                         query: query1,
                         asPath: autoExportDynamic ? pathname1 : as1,
                         isPreview: !!isPreview,
-                        locale: 1 ? void 0 : 0,
+                        locale: void 0,
                         isFallback
                     }, this._initialMatchesMiddlewarePromise = Promise.resolve(!1), !as1.startsWith("//")) {
                         // in order for `e.state` to work on the `onpopstate` event
@@ -2790,7 +2786,7 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.parseRelativeUrl = function(url, base) {
-                const globalBase = new URL(1 ? _utils.getLocationOrigin() : 0), resolvedBase = base ? new URL(base, globalBase) : url.startsWith(".") ? new URL(1 ? window.location.href : 0) : globalBase, { pathname, searchParams, search, hash, href, origin } = new URL(url, resolvedBase);
+                const globalBase = new URL(_utils.getLocationOrigin()), resolvedBase = base ? new URL(base, globalBase) : url.startsWith(".") ? new URL(window.location.href) : globalBase, { pathname, searchParams, search, hash, href, origin } = new URL(url, resolvedBase);
                 if (origin !== globalBase.origin) throw Error("invariant: invalid relative URL, router received ".concat(url));
                 return {
                     pathname,
@@ -3119,7 +3115,7 @@
                     })), null;
             };
             var _react = (0, __webpack_require__(1598)/* ["default"] */ .Z)(__webpack_require__(7294));
-            const isServer = !1, useClientOnlyLayoutEffect = 1 ? _react.useLayoutEffect : ()=>{}, useClientOnlyEffect = isServer ? ()=>{} : _react.useEffect;
+            const isServer = !1, useClientOnlyLayoutEffect = _react.useLayoutEffect, useClientOnlyEffect = isServer ? ()=>{} : _react.useEffect;
         /***/ },
         /***/ 3794: /***/ function(__unused_webpack_module, exports, __webpack_require__) {
             "use strict";
@@ -3206,7 +3202,7 @@
                 }), Object.defineProperty(n, "__esModule", {
                     value: !0
                 });
-            }, void 0 !== n && (n.ab = "/" + "/"), y = {}, n.r(y), n.d(y, {
+            }, void 0 !== n && (n.ab = "//"), y = {}, n.r(y), n.d(y, {
                 getCLS: function() {
                     return E;
                 },

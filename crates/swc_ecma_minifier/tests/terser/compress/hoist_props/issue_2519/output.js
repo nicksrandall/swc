@@ -1,6 +1,4 @@
 function testFunc() {
-    return +({
-        x: (6 + 5) / 2
-    }).x;
+    return 5.5;
 }
 console.log(testFunc());

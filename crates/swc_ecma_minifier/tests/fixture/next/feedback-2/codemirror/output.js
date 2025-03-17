@@ -98,7 +98,7 @@ function(global, factory) {
     // Counts the column offset in a string, taking tabs into account.
     // Used mostly to find indentation.
     function countColumn(string, end, tabSize, startIndex, startValue) {
-        null == end && (end = string.search(/[^\s\u00a0]/)) == -1 && (end = string.length);
+        null == end && -1 == (end = string.search(/[^\s\u00a0]/)) && (end = string.length);
         for(var i = startIndex || 0, n = startValue || 0;;){
             var nextTab = string.indexOf("\t", i);
             if (nextTab < 0 || nextTab >= end) return n + (end - i);
@@ -146,7 +146,7 @@ function(global, factory) {
     function findColumn(string, goal, tabSize) {
         for(var pos = 0, col = 0;;){
             var nextTab = string.indexOf("\t", pos);
-            nextTab == -1 && (nextTab = string.length);
+            -1 == nextTab && (nextTab = string.length);
             var skipped = nextTab - pos;
             if (nextTab == string.length || col + skipped >= goal) return pos + Math.min(skipped, goal - col);
             if (col += nextTab - pos, col += tabSize - col % tabSize, pos = nextTab + 1, col >= goal) return pos;
@@ -374,7 +374,7 @@ function(global, factory) {
     }
     function signalCursorActivity(cm) {
         var arr = cm._handlers && cm._handlers.cursorActivity;
-        if (arr) for(var set = cm.curOp.cursorActivityHandlers || (cm.curOp.cursorActivityHandlers = []), i = 0; i < arr.length; ++i)indexOf(set, arr[i]) == -1 && set.push(arr[i]);
+        if (arr) for(var set = cm.curOp.cursorActivityHandlers || (cm.curOp.cursorActivityHandlers = []), i = 0; i < arr.length; ++i)-1 == indexOf(set, arr[i]) && set.push(arr[i]);
     }
     function hasHandler(emitter, type) {
         return getHandlers(emitter, type).length > 0;
@@ -419,9 +419,9 @@ function(global, factory) {
     }(), splitLinesAuto = 3 != "\n\nb".split(/\n/).length ? function(string) {
         for(var pos = 0, result = [], l = string.length; pos <= l;){
             var nl = string.indexOf("\n", pos);
-            nl == -1 && (nl = string.length);
+            -1 == nl && (nl = string.length);
             var line = string.slice(pos, "\r" == string.charAt(nl - 1) ? nl - 1 : nl), rt = line.indexOf("\r");
-            rt != -1 ? (result.push(line.slice(0, rt)), pos += rt + 1) : (result.push(line), pos = nl + 1);
+            -1 != rt ? (result.push(line.slice(0, rt)), pos += rt + 1) : (result.push(line), pos = nl + 1);
         }
         return result;
     } : function(string) {
@@ -1906,7 +1906,7 @@ function(global, factory) {
             var lineView = display.view[findViewIndex(cm, line)];
             if (null != lineView.node) {
                 var arr = lineView.changes || (lineView.changes = []);
-                indexOf(arr, type) == -1 && arr.push(type);
+                -1 == indexOf(arr, type) && arr.push(type);
             }
         }
     }
@@ -2685,7 +2685,7 @@ function(global, factory) {
         ], "CodeMirror-sizer"), this.sizerWidth = null, // Behavior of elts with overflow: auto and padding is
         // inconsistent across browsers. This is used to ensure the
         // scrollable area is big enough.
-        this.heightForcer = elt("div", null, null, "position: absolute; height: " + "50px; width: 1px;"), // Will contain the gutters, if any.
+        this.heightForcer = elt("div", null, null, "position: absolute; height: 50px; width: 1px;"), // Will contain the gutters, if any.
         this.gutters = elt("div", null, "CodeMirror-gutters"), this.lineGutter = null, // Actual scrollable element.
         this.scroller = elt("div", [
             this.sizer,
@@ -3196,7 +3196,7 @@ function(global, factory) {
                 if (doc.iter(from.line, to.line + 1, function(line) {
                     if (line.markedSpans) for(var i = 0; i < line.markedSpans.length; ++i){
                         var mark = line.markedSpans[i].marker;
-                        mark.readOnly && (!markers || indexOf(markers, mark) == -1) && (markers || (markers = [])).push(mark);
+                        mark.readOnly && (!markers || -1 == indexOf(markers, mark)) && (markers || (markers = [])).push(mark);
                     }
                 }), !markers) return null;
                 for(var parts = [
@@ -3239,7 +3239,7 @@ function(global, factory) {
             addChangeToHistory(doc, change, selAfter, doc.cm ? doc.cm.curOp.id : NaN), makeChangeSingleDoc(doc, change, selAfter, stretchSpansOverChange(doc, change));
             var rebased = [];
             linkedDocs(doc, function(doc, sharedHist) {
-                sharedHist || indexOf(rebased, doc.history) != -1 || (rebaseHist(doc.history, change), rebased.push(doc.history)), makeChangeSingleDoc(doc, change, null, stretchSpansOverChange(doc, change));
+                sharedHist || -1 != indexOf(rebased, doc.history) || (rebaseHist(doc.history, change), rebased.push(doc.history)), makeChangeSingleDoc(doc, change, null, stretchSpansOverChange(doc, change));
             });
         }
     }
@@ -3281,7 +3281,7 @@ function(global, factory) {
                         var rebased = [];
                         // Propagate to the linked documents
                         linkedDocs(doc, function(doc, sharedHist) {
-                            sharedHist || indexOf(rebased, doc.history) != -1 || (rebaseHist(doc.history, change), rebased.push(doc.history)), makeChangeSingleDoc(doc, change, null, mergeOldSpans(doc, change));
+                            sharedHist || -1 != indexOf(rebased, doc.history) || (rebaseHist(doc.history, change), rebased.push(doc.history)), makeChangeSingleDoc(doc, change, null, mergeOldSpans(doc, change));
                         });
                     }(i$1);
                     if (returned) return returned.v;
@@ -3682,7 +3682,7 @@ function(global, factory) {
         null == side && "bookmark" == this.type && (side = 1);
         for(var from, to, i = 0; i < this.lines.length; ++i){
             var line = this.lines[i], span = getMarkedSpanFor(line.markedSpans, this);
-            if (null != span.from && (from = Pos(lineObj ? line : lineNo(line), span.from), side == -1)) return from;
+            if (null != span.from && (from = Pos(lineObj ? line : lineNo(line), span.from), -1 == side)) return from;
             if (null != span.to && (to = Pos(lineObj ? line : lineNo(line), span.to), 1 == side)) return to;
         }
         return from && {
@@ -3706,7 +3706,7 @@ function(global, factory) {
     }, TextMarker.prototype.attachLine = function(line) {
         if (!this.lines.length && this.doc.cm) {
             var op = this.doc.cm.curOp;
-            op.maybeHiddenMarkers && indexOf(op.maybeHiddenMarkers, this) != -1 || (op.maybeUnhiddenMarkers || (op.maybeUnhiddenMarkers = [])).push(this);
+            op.maybeHiddenMarkers && -1 != indexOf(op.maybeHiddenMarkers, this) || (op.maybeUnhiddenMarkers || (op.maybeUnhiddenMarkers = [])).push(this);
         }
         this.lines.push(line);
     }, TextMarker.prototype.detachLine = function(line) {
@@ -4111,7 +4111,7 @@ function(global, factory) {
                             });
                             for(var j = 0; j < marker.markers.length; j++){
                                 var subMarker = marker.markers[j];
-                                indexOf(linked, subMarker.doc) == -1 && (subMarker.parent = null, marker.markers.splice(j--, 1));
+                                -1 == indexOf(linked, subMarker.doc) && (subMarker.parent = null, marker.markers.splice(j--, 1));
                             }
                         }(i);
                     }(findSharedMarkers(this));
@@ -4180,31 +4180,6 @@ function(global, factory) {
                     })();
                 }, readTextFromFile = function(file, i) {
                     if (cm.options.allowDropFileTypes && -1 == indexOf(cm.options.allowDropFileTypes, file.type)) {
-            if (!(!pos || cm.isReadOnly())) // Might be a file drop, in which case we simply extract the text
-            // and insert it.
-            if (files && files.length && window.FileReader && window.File) for(var n = files.length, text = Array(n), read = 0, markAsReadAndPasteIfAllFilesAreRead = function() {
-                ++read == n && operation(cm, function() {
-                    var change = {
-                        from: pos = clipPos(cm.doc, pos),
-                        to: pos,
-                        text: cm.doc.splitLines(text.filter(function(t) {
-                            return null != t;
-                        }).join(cm.doc.lineSeparator())),
-                        origin: "paste"
-                    };
-                    makeChange(cm.doc, change), setSelectionReplaceHistory(cm.doc, simpleSelection(clipPos(cm.doc, pos), clipPos(cm.doc, changeEnd(change))));
-                })();
-            }, readTextFromFile = function(file, i) {
-                if (cm.options.allowDropFileTypes && indexOf(cm.options.allowDropFileTypes, file.type) == -1) {
-                    markAsReadAndPasteIfAllFilesAreRead();
-                    return;
-                }
-                var reader = new FileReader();
-                reader.onerror = function() {
-                    return markAsReadAndPasteIfAllFilesAreRead();
-                }, reader.onload = function() {
-                    var content = reader.result;
-                    if (/[\x00-\x08\x0e-\x1f]{2}/.test(content)) {
                         markAsReadAndPasteIfAllFilesAreRead();
                         return;
                     }
@@ -4925,7 +4900,7 @@ function(global, factory) {
                         var range = rangeForUnit(cm, start, behavior.unit);
                         ourRange = behavior.extend ? extendRange(ourRange, range.anchor, range.head, behavior.extend) : range;
                     }
-                    behavior.addNew ? ourIndex == -1 ? (ourIndex = ranges.length, setSelection(doc, normalizeSelection(cm, ranges.concat([
+                    behavior.addNew ? -1 == ourIndex ? (ourIndex = ranges.length, setSelection(doc, normalizeSelection(cm, ranges.concat([
                         ourRange
                     ]), ourIndex), {
                         scroll: !1,
@@ -5124,7 +5099,7 @@ function(global, factory) {
             function farAway(touch, other) {
                 if (null == other.left) return !0;
                 var dx = other.left - touch.left, dy = other.top - touch.top;
-                return dx * dx + dy * dy > 20 * 20;
+                return dx * dx + dy * dy > 400;
             }
             on(d.scroller, "touchstart", function(e) {
                 if (!signalDOMEvent(cm, e) && !function(e) {
@@ -5894,7 +5869,7 @@ function(global, factory) {
         input.contextMenuPending && input.contextMenuPending();
         var pos = posFromMouse(cm, e), scrollPos = display.scroller.scrollTop;
         if (pos && !presto) {
-            cm.options.resetSelectionOnContextMenu && cm.doc.sel.contains(pos) == -1 && operation(cm, setSelection)(cm.doc, simpleSelection(pos), sel_dontScroll);
+            cm.options.resetSelectionOnContextMenu && -1 == cm.doc.sel.contains(pos) && operation(cm, setSelection)(cm.doc, simpleSelection(pos), sel_dontScroll);
             var oldCSS = te.style.cssText, oldWrapperCSS = input.wrapper.style.cssText, wrapperBox = input.wrapper.offsetParent.getBoundingClientRect();
             if (input.wrapper.style.cssText = "position: static", te.style.cssText = "position: absolute; width: 30px; height: 30px;\n      top: " + (e.clientY - wrapperBox.top - 5) + "px; left: " + (e.clientX - wrapperBox.left - 5) + "px;\n      z-index: 1000; background: " + (ie ? "rgba(255, 255, 255, .05)" : "transparent") + ";\n      outline: none; border-width: 0; outline: none; overflow: hidden; opacity: .05; filter: alpha(opacity=5);", webkit && (oldScrollY = window.scrollY), display.input.focus(), webkit && window.scrollTo(null, oldScrollY), display.input.reset(), cm.somethingSelected() || (te.value = input.prevInput = " "), input.contextMenuPending = rehide, display.selForContextMenu = cm.doc.sel, clearTimeout(display.detectingSelectAll), ie && ie_version >= 9 && prepareSelectAllHack(), captureRightClick) {
                 e_stop(e);
@@ -5949,7 +5924,7 @@ function(global, factory) {
                 cm.doc.iter(function(line) {
                     for(var pos = 0;;){
                         var found = line.text.indexOf(val, pos);
-                        if (found == -1) break;
+                        if (-1 == found) break;
                         pos = found + val.length, newBreaks.push(Pos(lineNo, found));
                     }
                     lineNo++;
@@ -6106,7 +6081,7 @@ function(global, factory) {
             else mode.helperType && help[mode.helperType] ? found.push(help[mode.helperType]) : help[mode.name] && found.push(help[mode.name]);
             for(var i$1 = 0; i$1 < help._global.length; i$1++){
                 var cur = help._global[i$1];
-                cur.pred(mode, this) && indexOf(found, cur.val) == -1 && found.push(cur.val);
+                cur.pred(mode, this) && -1 == indexOf(found, cur.val) && found.push(cur.val);
             }
             return found;
         },

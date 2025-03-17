@@ -2,9 +2,7 @@
 var _data_param = 'value';
 console.log(void 0 === _data_param ? function() {
     throw Error('param is not defined');
-}() : _data_param), 'value' === void 0 && function() {
-    throw Error('param is not defined');
-}();
+}() : _data_param);
 var window = {};
 window.window = window, window.window.window;
 var window1 = {};

@@ -1,8 +1,8 @@
-a = typeof 1;
-b = typeof "test";
+a = "number";
+b = "string";
 c = "object";
 d = "object";
 e = typeof /./;
-f = typeof false;
+f = "boolean";
 g = "function";
-h = typeof void 0;
+h = "undefined";

@@ -1,10 +1,10 @@
 function f1(x) {
-    return 1 ? "yes" : "no";
+    return "yes";
 }
 function f2() {
-    return (g(), 1) ? "Yes" : "No";
+    return g(), "Yes";
 }
-1 ? foo() : bar();
+foo();
 console.log(1);
 var a = (console.log(2), !1);
 foo();

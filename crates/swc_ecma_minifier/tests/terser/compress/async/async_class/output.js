@@ -1,8 +1,8 @@
 class Foo {
     async m1() {
-        return await foo(1 + 2);
+        return await foo(3);
     }
     static async m2() {
-        return await foo(3 + 4);
+        return await foo(7);
     }
 }

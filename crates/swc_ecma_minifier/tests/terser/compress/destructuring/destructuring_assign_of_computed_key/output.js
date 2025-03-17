@@ -1,6 +1,4 @@
 let x;
 let four = 4;
-({ [5 + 2 - four]: x } = {
-    [1 + 2]: 42
-});
+({ [7 - four]: x } = { [3]: 42 });
 console.log(x);

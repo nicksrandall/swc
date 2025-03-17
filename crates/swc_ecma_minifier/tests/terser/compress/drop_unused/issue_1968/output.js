@@ -1,4 +1,4 @@
 function f(c) {
-    if (c) return 2 + 3;
+    if (c) return 5;
 }
 console.log(f(1));

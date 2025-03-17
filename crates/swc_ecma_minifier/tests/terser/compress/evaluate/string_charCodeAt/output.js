@@ -1,1 +1,1 @@
-console.log("foo".charCodeAt("bar".length));
+console.log(NaN);

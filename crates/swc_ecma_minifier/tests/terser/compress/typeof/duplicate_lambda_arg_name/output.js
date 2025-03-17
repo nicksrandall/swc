@@ -1,3 +1,3 @@
 console.log(function long_name(long_name) {
-    return typeof void 0;
+    return "undefined";
 }());
